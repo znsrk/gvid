@@ -1,0 +1,204 @@
+[
+  {
+    "id": "1769335774647",
+    "title": "Assembly Language Fundamentals",
+    "description": "Flashcards covering basic concepts in Assembly Language Programming.",
+    "cards": [
+      {
+        "id": "card-1",
+        "front": "What does CPU stand for?",
+        "back": "Central Processing Unit",
+        "category": "Fundamentals",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-2",
+        "front": "What is the main function of the CPU?",
+        "back": "Execute instructions",
+        "category": "Fundamentals",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-3",
+        "front": "What is assembly language?",
+        "back": "A low-level programming language that uses mnemonics to represent machine code instructions.",
+        "category": "Fundamentals",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-4",
+        "front": "What is a mnemonic in assembly language?",
+        "back": "A symbolic representation of an instruction (e.g., ADD, MOV).",
+        "category": "Fundamentals",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-5",
+        "front": "What is an assembler?",
+        "back": "A program that translates assembly language code into machine code.",
+        "category": "Tools",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-6",
+        "front": "What is the purpose of a linker?",
+        "back": "Combines object files and libraries into an executable program.",
+        "category": "Tools",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-7",
+        "front": "Name some advantages of using assembly language.",
+        "back": "Fine-grained control over hardware, optimization for performance and size.",
+        "category": "Advantages",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-8",
+        "front": "Name some disadvantages of using assembly language.",
+        "back": "Complex, time-consuming to write, and machine-dependent.",
+        "category": "Disadvantages",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-9",
+        "front": "What is a register?",
+        "back": "A small, high-speed storage location within the CPU.",
+        "category": "CPU Architecture",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-10",
+        "front": "What is the purpose of the Instruction Pointer (IP) or Program Counter (PC)?",
+        "back": "Stores the address of the next instruction to be executed.",
+        "category": "CPU Architecture",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-11",
+        "front": "What is the stack?",
+        "back": "A region of memory used for storing temporary data, function parameters, and return addresses.",
+        "category": "Memory Management",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-12",
+        "front": "What is the purpose of the stack pointer?",
+        "back": "Keeps track of the top of the stack.",
+        "category": "Memory Management",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-13",
+        "front": "Explain the function of an interrupt in assembly.",
+        "back": "An event that disrupts the normal execution of the program and transfers control to an interrupt handler.",
+        "category": "Interrupts",
+        "difficulty": "hard",
+        "mastered": false
+      },
+      {
+        "id": "card-14",
+        "front": "Give some applications of assembly languages.",
+        "back": "Operating system kernels, device drivers, embedded systems, game development (optimization).",
+        "category": "Applications",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-15",
+        "front": "What is direct addressing?",
+        "back": "Addressing mode where the operand's address is explicitly specified in the instruction.",
+        "category": "Addressing Modes",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-16",
+        "front": "What is indirect addressing?",
+        "back": "Addressing mode where the instruction specifies a register that contains the address of the operand.",
+        "category": "Addressing Modes",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-17",
+        "front": "Explain the purpose of conditional jumps in assembly.",
+        "back": "To alter program flow based on the evaluation of flags set by previous instructions. Example: JZ (jump if zero).",
+        "category": "Control Flow",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-18",
+        "front": "What is a flag register?",
+        "back": "A register that contains status flags, such as zero flag, carry flag, sign flag, etc., which reflect the result of arithmetic and logical operations.",
+        "category": "CPU Architecture",
+        "difficulty": "medium",
+        "mastered": false
+      },
+      {
+        "id": "card-19",
+        "front": "Explain what is meant by 'little endian' representation.",
+        "back": "The least significant byte is stored at the lowest memory address.",
+        "category": "Memory Representation",
+        "difficulty": "hard",
+        "mastered": false
+      },
+      {
+        "id": "card-20",
+        "front": "Explain what is meant by 'big endian' representation.",
+        "back": "The most significant byte is stored at the lowest memory address.",
+        "category": "Memory Representation",
+        "difficulty": "hard",
+        "mastered": false
+      },
+      {
+        "id": "card-21",
+        "front": "What is the purpose of .data segment?",
+        "back": "Section of the program's memory dedicated to storing initialized data. ",
+        "category": "Memory Sections",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-22",
+        "front": "What is the purpose of .bss segment?",
+        "back": "Section of the program's memory dedicated to uninitialized data. Data stored here is usually initialized to zero.",
+        "category": "Memory Sections",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-23",
+        "front": "What is the purpose of .text segment?",
+        "back": "Section of the program's memory where the executable code is stored. ",
+        "category": "Memory Sections",
+        "difficulty": "easy",
+        "mastered": false
+      },
+      {
+        "id": "card-24",
+        "front": "What is a macro in assembly language?",
+        "back": "A sequence of instructions that are given a name. When the assembler encounters the macro name, it replaces it with the sequence of instructions.",
+        "category": "Assembly Directives",
+        "difficulty": "medium",
+        "mastered": false
+      }
+    ],
+    "createdAt": "2026-01-25T10:09:34.647Z",
+    "sourceType": "standalone",
+    "coverImage": "https://images.unsplash.com/photo-1701099153587-6f28b448ff0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzMzU4MDl8&ixlib=rb-4.1.0&q=80&w=1080"
+  }
+]

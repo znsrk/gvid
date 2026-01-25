@@ -1,0 +1,382 @@
+[
+  {
+    "id": "1769336402437",
+    "title": "Assembly Programming Fundamentals Quiz",
+    "description": "This quiz tests your understanding of fundamental concepts in assembly programming, including registers, memory organization, instructions, and basic operations.",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "Which of the following is a primary function of registers in assembly programming?",
+        "options": [
+          "Storing program code persistently",
+          "Holding data and addresses during program execution",
+          "Managing the operating system's scheduling algorithms",
+          "Controlling the computer's power supply"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Registers are small, high-speed storage locations within the CPU used to quickly access data and addresses during program execution. They are crucial for efficient processing."
+      },
+      {
+        "id": "q2",
+        "question": "What does the term 'assembly language' refer to?",
+        "options": [
+          "A high-level programming language",
+          "A low-level programming language that uses mnemonics to represent machine code instructions",
+          "A type of database management system",
+          "A network protocol for data transfer"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Assembly language is a low-level programming language that uses mnemonics (e.g., ADD, MOV) to represent machine code instructions, making it more readable than raw machine code."
+      },
+      {
+        "id": "q3",
+        "question": "Which of the following instructions typically moves data from one location to another in assembly language?",
+        "options": [
+          "ADD",
+          "SUB",
+          "MOV",
+          "CMP"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The 'MOV' instruction is generally used to move data between registers, memory locations, or immediate values in assembly language."
+      },
+      {
+        "id": "q4",
+        "question": "What is the purpose of the stack in assembly programming?",
+        "options": [
+          "Storing frequently used variables",
+          "Managing function calls and local variables",
+          "Providing persistent storage for data",
+          "Controlling the display output"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The stack is a region of memory used for managing function calls (e.g., pushing return addresses and arguments) and storing local variables. It follows a LIFO (Last-In, First-Out) principle."
+      },
+      {
+        "id": "q5",
+        "question": "What is the role of the program counter (PC) register?",
+        "options": [
+          "Storing the result of the last arithmetic operation",
+          "Holding the address of the next instruction to be executed",
+          "Managing the system's clock speed",
+          "Controlling input/output devices"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The program counter (PC) register holds the memory address of the next instruction that the CPU will fetch and execute. It's essential for program flow."
+      },
+      {
+        "id": "q6",
+        "question": "What does the term 'operand' refer to in an assembly language instruction?",
+        "options": [
+          "The operation to be performed (e.g., ADD, SUB)",
+          "The data or memory location on which the operation is performed",
+          "The assembler directive that defines a constant",
+          "The comment added for documentation"
+        ],
+        "correctAnswer": 1,
+        "explanation": "An operand is the data or memory location that an instruction operates on. For example, in 'ADD AX, BX', AX and BX are operands."
+      },
+      {
+        "id": "q7",
+        "question": "What is the purpose of conditional jump instructions (e.g., JE, JNE) in assembly language?",
+        "options": [
+          "To unconditionally jump to a different part of the program",
+          "To jump to a different part of the program based on the result of a previous comparison",
+          "To halt the program's execution",
+          "To perform arithmetic operations"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Conditional jump instructions allow the program to change its execution path based on the results of previous operations (usually comparisons), enabling branching and decision-making."
+      },
+      {
+        "id": "q8",
+        "question": "Which of the following is NOT a typical type of register in a CPU?",
+        "options": [
+          "General-purpose registers",
+          "Segment registers",
+          "Floating-point registers",
+          "Television registers"
+        ],
+        "correctAnswer": 3,
+        "explanation": "General-purpose, segment, and floating-point registers are common types of registers in a CPU. Television registers do not exist."
+      },
+      {
+        "id": "q9",
+        "question": "What is the difference between direct addressing and indirect addressing?",
+        "options": [
+          "Direct addressing uses a register to store the address, while indirect addressing uses a constant value.",
+          "Direct addressing uses a constant value as the address, while indirect addressing uses a register to store the address.",
+          "Direct addressing is always faster than indirect addressing.",
+          "Indirect addressing is only used for accessing arrays."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Direct addressing uses a constant value specified in the instruction as the memory address. Indirect addressing uses the value stored in a register as the memory address. This allows for more dynamic memory access."
+      },
+      {
+        "id": "q10",
+        "question": "What is the purpose of segment registers (e.g., CS, DS, SS) in segmented memory architecture?",
+        "options": [
+          "To store the current date and time",
+          "To define the starting address of different memory segments",
+          "To manage interrupt requests",
+          "To control the CPU's clock speed"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Segment registers define the starting address of different memory segments (e.g., code, data, stack). They are used in segmented memory architectures to calculate physical addresses by adding the segment register's value (shifted left) to an offset."
+      },
+      {
+        "id": "q11",
+        "question": "In assembly language, what is a 'label' typically used for?",
+        "options": [
+          "To define a constant value",
+          "To mark a specific location in the code that can be jumped to",
+          "To declare a variable",
+          "To comment out a line of code"
+        ],
+        "correctAnswer": 2,
+        "explanation": "A label is a symbolic name assigned to a specific memory location or instruction in the code. It is commonly used as a target for jump or call instructions, making the code more readable and maintainable."
+      },
+      {
+        "id": "q12",
+        "question": "Which of the following best describes the function of an assembler?",
+        "options": [
+          "It converts high-level language code into machine code.",
+          "It converts assembly language code into machine code.",
+          "It directly executes assembly language code.",
+          "It debugs machine code."
+        ],
+        "correctAnswer": 1,
+        "explanation": "An assembler is a program that translates assembly language code (which uses mnemonics and symbolic addresses) into machine code (binary instructions) that the CPU can directly execute."
+      },
+      {
+        "id": "q13",
+        "question": "What is the difference between a NEAR call and a FAR call in assembly?",
+        "options": [
+          "A NEAR call is faster than a FAR call.",
+          "A NEAR call is used for calls within the same code segment, while a FAR call is used for calls to a different code segment.",
+          "A FAR call uses more registers than a NEAR call.",
+          "There is no difference between NEAR and FAR calls."
+        ],
+        "correctAnswer": 1,
+        "explanation": "A NEAR call is used for calling procedures within the same code segment, requiring only the instruction pointer (IP) to be saved/restored. A FAR call is used for calling procedures in a different code segment, requiring both the code segment (CS) and instruction pointer (IP) to be saved/restored."
+      },
+      {
+        "id": "q14",
+        "question": "Consider the following assembly code snippet: `MOV AX, [BX]`. What is being performed?",
+        "options": [
+          "The value of AX is moved to the memory location pointed to by BX.",
+          "The value at the memory location pointed to by BX is moved into AX.",
+          "The address of BX is moved into AX.",
+          "AX and BX are added together and the result is stored in AX."
+        ],
+        "correctAnswer": 1,
+        "explanation": "The square brackets `[]` around `BX` indicate memory addressing. Therefore, the code is moving the value stored at the memory location whose address is held in the `BX` register into the `AX` register."
+      },
+      {
+        "id": "q15",
+        "question": "What is an interrupt in assembly programming?",
+        "options": [
+          "A type of data structure",
+          "A signal that suspends the current program execution to handle an event",
+          "A debugging tool",
+          "A method for encrypting data"
+        ],
+        "correctAnswer": 1,
+        "explanation": "An interrupt is a signal that causes the CPU to suspend the current program execution and transfer control to an interrupt handler. This is typically used to handle events like I/O requests, hardware errors, or timer expirations."
+      }
+    ],
+    "createdAt": "2026-01-25T10:20:02.437Z",
+    "isRapid": false,
+    "coverImage": "https://images.unsplash.com/photo-1701099153650-bc35d4327c92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzMzY0Mzd8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "id": "1769335844464",
+    "title": "The Nature of Light Quiz",
+    "description": "Test your understanding of the dual nature of light, including wave and particle properties, the electromagnetic spectrum, and related phenomena.",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "Which of the following phenomena provides the strongest evidence for the wave nature of light?",
+        "options": [
+          "Photoelectric effect",
+          "Blackbody radiation",
+          "Diffraction",
+          "Atomic emission spectra"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Diffraction, the bending of waves around obstacles, is a characteristic wave phenomenon. The other options relate more to the particle nature of light or quantum mechanics."
+      },
+      {
+        "id": "q2",
+        "question": "What is the relationship between the frequency (f) and wavelength (λ) of light?",
+        "options": [
+          "They are directly proportional.",
+          "They are inversely proportional.",
+          "They are independent of each other.",
+          "Frequency is the square root of wavelength."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Frequency and wavelength are inversely proportional. The speed of light (c) is constant, and c = fλ.  Therefore, as frequency increases, wavelength decreases, and vice-versa."
+      },
+      {
+        "id": "q3",
+        "question": "Which color of visible light has the shortest wavelength?",
+        "options": [
+          "Red",
+          "Green",
+          "Blue",
+          "Yellow"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Blue light has the shortest wavelength in the visible spectrum, while red light has the longest. Remember ROYGBIV (red, orange, yellow, green, blue, indigo, violet) and their wavelength order."
+      },
+      {
+        "id": "q4",
+        "question": "What is a photon?",
+        "options": [
+          "A wave of electromagnetic radiation",
+          "A fundamental particle of matter",
+          "A particle of light",
+          "A unit of electrical charge"
+        ],
+        "correctAnswer": 2,
+        "explanation": "A photon is a discrete packet of energy associated with electromagnetic radiation, effectively a particle of light. It has no mass but carries energy and momentum."
+      },
+      {
+        "id": "q5",
+        "question": "The energy of a photon is directly proportional to which property of light?",
+        "options": [
+          "Wavelength",
+          "Amplitude",
+          "Frequency",
+          "Intensity"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The energy (E) of a photon is directly proportional to its frequency (f) according to the equation E = hf, where h is Planck's constant."
+      },
+      {
+        "id": "q6",
+        "question": "Which of the following electromagnetic waves has the highest frequency?",
+        "options": [
+          "Radio waves",
+          "Microwaves",
+          "X-rays",
+          "Infrared radiation"
+        ],
+        "correctAnswer": 2,
+        "explanation": "X-rays have the highest frequency among the given options. The order from lowest to highest frequency is generally: radio waves, microwaves, infrared, visible light, ultraviolet, X-rays, gamma rays."
+      },
+      {
+        "id": "q7",
+        "question": "What phenomenon demonstrates the particle nature of light by showing that light can eject electrons from a metal surface?",
+        "options": [
+          "Refraction",
+          "Interference",
+          "Photoelectric effect",
+          "Polarization"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The photoelectric effect demonstrates the particle nature of light.  Light shines on a metal, and if the photons have enough energy, they will eject electrons."
+      },
+      {
+        "id": "q8",
+        "question": "What is the speed of light in a vacuum?",
+        "options": [
+          "3.0 x 10^6 m/s",
+          "3.0 x 10^8 m/s",
+          "3.0 x 10^10 m/s",
+          "3.0 x 10^12 m/s"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The speed of light in a vacuum is approximately 3.0 x 10^8 meters per second. This is a fundamental constant in physics."
+      },
+      {
+        "id": "q9",
+        "question": "What is the dual nature of light?",
+        "options": [
+          "It can only be a wave or a particle, never both.",
+          "It exhibits properties of both a wave and a particle.",
+          "It is sometimes visible and sometimes invisible.",
+          "It can only travel through a vacuum."
+        ],
+        "correctAnswer": 1,
+        "explanation": "The dual nature of light means that light can behave as both a wave and a particle, depending on the experiment or phenomenon being observed.  This is a core concept in quantum mechanics."
+      },
+      {
+        "id": "q10",
+        "question": "Which of the following is NOT part of the electromagnetic spectrum?",
+        "options": [
+          "Sound waves",
+          "Radio waves",
+          "Ultraviolet light",
+          "Gamma rays"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Sound waves are mechanical waves, requiring a medium to travel through. Radio waves, ultraviolet light, and gamma rays are all parts of the electromagnetic spectrum."
+      },
+      {
+        "id": "q11",
+        "question": "What is the effect of increasing the intensity of light on the photoelectric effect, assuming the light's frequency is above the threshold frequency?",
+        "options": [
+          "It increases the kinetic energy of the emitted electrons.",
+          "It increases the number of emitted electrons.",
+          "It decreases the kinetic energy of the emitted electrons.",
+          "It stops the emission of electrons."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Increasing the intensity of light (above the threshold frequency) increases the number of photons incident on the metal surface, leading to a proportional increase in the number of emitted electrons. The kinetic energy of the emitted electrons is determined by the frequency of the light, not the intensity."
+      },
+      {
+        "id": "q12",
+        "question": "In the double-slit experiment, what pattern is observed on the screen, demonstrating the wave nature of light?",
+        "options": [
+          "A single bright spot",
+          "Two distinct bright spots",
+          "An interference pattern of alternating bright and dark fringes",
+          "A uniform distribution of light"
+        ],
+        "correctAnswer": 3,
+        "explanation": "The double-slit experiment demonstrates the wave nature of light by producing an interference pattern of alternating bright and dark fringes on the screen. This is due to the constructive and destructive interference of the light waves passing through the two slits."
+      },
+      {
+        "id": "q13",
+        "question": "If light of a certain frequency has a wavelength of λ in a vacuum, what will happen to its wavelength when it enters a medium with a refractive index greater than 1?",
+        "options": [
+          "The wavelength will increase.",
+          "The wavelength will decrease.",
+          "The wavelength will stay the same.",
+          "The wavelength will become infinite."
+        ],
+        "correctAnswer": 1,
+        "explanation": "When light enters a medium with a refractive index greater than 1, its speed decreases. Since the frequency remains the same, the wavelength must decrease to maintain the relationship c = fλ, where c is the speed of light."
+      },
+      {
+        "id": "q14",
+        "question": "The Compton effect describes the scattering of photons by electrons, resulting in a decrease in the photon's energy and an increase in its:",
+        "options": [
+          "Frequency",
+          "Wavelength",
+          "Speed",
+          "Amplitude"
+        ],
+        "correctAnswer": 1,
+        "explanation": "In the Compton effect, a photon collides with an electron and transfers some of its energy to the electron. This results in a decrease in the photon's energy, which corresponds to an increase in its wavelength (since energy and wavelength are inversely proportional)."
+      },
+      {
+        "id": "q15",
+        "question": "According to Heisenberg's Uncertainty Principle, what is the fundamental limit on how precisely we can simultaneously know the position and momentum of a photon?",
+        "options": [
+          "There is no limit; we can know both with perfect accuracy.",
+          "The more accurately we know its position, the less accurately we know its momentum, and vice versa.",
+          "The more accurately we know its position, the more accurately we know its momentum.",
+          "We can only accurately know either its position or its momentum, but never both."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Heisenberg's Uncertainty Principle states that there is a fundamental limit to the accuracy with which we can simultaneously know certain pairs of physical properties, such as position and momentum.  The more precisely one property is known, the less precisely the other can be known."
+      }
+    ],
+    "createdAt": "2026-01-25T10:10:44.464Z",
+    "isRapid": false,
+    "coverImage": "https://images.unsplash.com/photo-1564502716801-23949c1ad3d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzMzU4Nzl8&ixlib=rb-4.1.0&q=80&w=1080"
+  }
+]
