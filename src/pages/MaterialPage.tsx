@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CourseStep, FlashcardDeck, Flashcard, MatchingGame } from '../types/roadmap';
 import LatexText from '../components/LatexText';
+import { apiPost } from '../lib/fetch';
 
 interface MaterialPageProps {
   step: CourseStep;
@@ -14,8 +15,6 @@ interface MaterialPageProps {
   onGenerateMatchingGame?: (game: MatchingGame) => void;
   onLoadingChange?: (loading: boolean, message?: string) => void;
 }
-
-const API_BASE = 'http://localhost:3001/api';
 
 const MaterialPage: React.FC<MaterialPageProps> = ({ 
   step, 
@@ -43,14 +42,10 @@ const MaterialPage: React.FC<MaterialPageProps> = ({
     onLoadingChange?.(true, 'Generating flashcards from materials...');
     
     try {
-      const response = await fetch(`${API_BASE}/generate-step-flashcards`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          stepTitle: step.title,
-          stepDescription: step.description,
-          materials: step.materials
-        }),
+      const response = await apiPost('/generate-step-flashcards', {
+        stepTitle: step.title,
+        stepDescription: step.description,
+        materials: step.materials
       });
 
       if (!response.ok) throw new Error('Failed to generate flashcards');
@@ -65,7 +60,7 @@ const MaterialPage: React.FC<MaterialPageProps> = ({
         createdAt: new Date().toISOString(),
         sourceType: 'course',
         sourceCourseId: courseId,
-        coverImage: 'linear-gradient(135deg, #0b4c8a 0%, #6366f1 100%)'
+        coverImage: 'linear-gradient(135deg, #06b6d4 0%, #6366f1 100%)'
       };
       
       onGenerateFlashcards?.(deck);
@@ -84,14 +79,10 @@ const MaterialPage: React.FC<MaterialPageProps> = ({
     onLoadingChange?.(true, 'Creating matching game from materials...');
     
     try {
-      const response = await fetch(`${API_BASE}/generate-step-matching-game`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          stepTitle: step.title,
-          stepDescription: step.description,
-          materials: step.materials
-        }),
+      const response = await apiPost('/generate-step-matching-game', {
+        stepTitle: step.title,
+        stepDescription: step.description,
+        materials: step.materials
       });
 
       if (!response.ok) throw new Error('Failed to generate matching game');
@@ -201,7 +192,36 @@ const MaterialPage: React.FC<MaterialPageProps> = ({
               {currentMaterial.description && (
                 <p className="material-description"><LatexText>{currentMaterial.description}</LatexText></p>
               )}
-              {currentMaterial.youtubeSearch && (
+              {/* YouTube embedded video */}
+              {currentMaterial.type === 'video' && currentMaterial.youtubeVideoId && !currentMaterial.youtubeVideoId.startsWith('search:') && (
+                <div className="youtube-embed-container">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${currentMaterial.youtubeVideoId}`}
+                    title={currentMaterial.youtubeTitle || currentMaterial.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="youtube-embed"
+                  />
+                </div>
+              )}
+              {/* YouTube search fallback */}
+              {currentMaterial.type === 'video' && currentMaterial.youtubeVideoId?.startsWith('search:') && (
+                <div className="youtube-search-hint">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF0000">
+                    <path d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.6c-1 .3-1.7 1.1-2 2.1C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.6 9.5.6 9.5.6s7.6 0 9.5-.6c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/>
+                  </svg>
+                  <a
+                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(currentMaterial.youtubeVideoId.replace('search:', ''))}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="youtube-search-link"
+                  >
+                    Search: "{currentMaterial.youtubeVideoId.replace('search:', '')}"
+                  </a>
+                </div>
+              )}
+              {/* Legacy youtubeSearch field */}
+              {currentMaterial.youtubeSearch && !currentMaterial.youtubeVideoId && (
                 <div className="youtube-search-hint">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF0000">
                     <path d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.6c-1 .3-1.7 1.1-2 2.1C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.6 9.5.6 9.5.6s7.6 0 9.5-.6c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/>
@@ -215,30 +235,19 @@ const MaterialPage: React.FC<MaterialPageProps> = ({
                     <LatexText>{currentMaterial.content}</LatexText>
                   </div>
                 )}
-                {currentMaterial.url && (
+                {currentMaterial.url && !currentMaterial.youtubeVideoId && (
                   <a 
                     href={currentMaterial.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className={`material-link ${currentMaterial.type === 'video' ? 'youtube-link' : ''}`}
+                    className="material-link"
                   >
-                    {currentMaterial.type === 'video' ? (
-                      <>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#FF0000">
-                          <path d="M23.5 6.2c-.3-1-1-1.8-2-2.1C19.6 3.5 12 3.5 12 3.5s-7.6 0-9.5.6c-1 .3-1.7 1.1-2 2.1C0 8.1 0 12 0 12s0 3.9.5 5.8c.3 1 1 1.8 2 2.1 1.9.6 9.5.6 9.5.6s7.6 0 9.5-.6c1-.3 1.7-1.1 2-2.1.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/>
-                        </svg>
-                        Search on YouTube
-                      </>
-                    ) : (
-                      <>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                          <polyline points="15 3 21 3 21 9"/>
-                          <line x1="10" y1="14" x2="21" y2="3"/>
-                        </svg>
-                        Open Resource
-                      </>
-                    )}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Open Resource
                   </a>
                 )}
               </div>

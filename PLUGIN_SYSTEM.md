@@ -1,6 +1,6 @@
-# OqyPlus Plugin System Documentation
+# gvidtech Plugin System Documentation
 
-> A comprehensive guide to creating, installing, and managing plugins for the OqyPlus learning platform.
+> A comprehensive guide to creating, installing, and managing plugins for the gvidtech learning platform.
 
 ---
 
@@ -26,7 +26,7 @@
 
 ## Overview
 
-The OqyPlus Plugin System is inspired by WordPress's hook architecture. It allows developers to:
+The gvidtech Plugin System is inspired by WordPress's hook architecture. It allows developers to:
 
 - **Modify data** as it flows through the application (Filters)
 - **Execute code** at specific points in the app lifecycle (Actions)
@@ -42,7 +42,7 @@ Plugins are JavaScript files that export a configuration object. They can be ins
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     OqyPlus Application                      │
+│                     gvidtech Application                      │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
@@ -217,13 +217,13 @@ Create a new file: `my-first-plugin.plugin.js`
       }
     };
     
-    document.addEventListener("oqyplus:quiz:completed", self._handler);
+    document.addEventListener("gvidtech:quiz:completed", self._handler);
     console.log("[My First Plugin] Activated!");
   },
   
   deactivate: function() {
     if (this._handler) {
-      document.removeEventListener("oqyplus:quiz:completed", this._handler);
+      document.removeEventListener("gvidtech:quiz:completed", this._handler);
     }
     console.log("[My First Plugin] Deactivated!");
   }
@@ -232,7 +232,7 @@ Create a new file: `my-first-plugin.plugin.js`
 
 ### Step 2: Install the Plugin
 
-1. Go to **Plugins** page in OqyPlus
+1. Go to **Plugins** page in gvidtech
 2. Click **Upload Custom Plugin** or drag & drop the file
 3. The plugin will appear in the list
 4. Click **Enable** to activate it
@@ -357,13 +357,13 @@ If you require proper `this` binding, the other approach is to use DOM custom ev
       console.log("Final score:", data.score + "/" + data.total);
     };
     
-    document.addEventListener("oqyplus:quiz:answered", self._onAnswered);
-    document.addEventListener("oqyplus:quiz:completed", self._onCompleted);
+    document.addEventListener("gvidtech:quiz:answered", self._onAnswered);
+    document.addEventListener("gvidtech:quiz:completed", self._onCompleted);
   },
   
   deactivate: function() {
-    document.removeEventListener("oqyplus:quiz:answered", this._onAnswered);
-    document.removeEventListener("oqyplus:quiz:completed", this._onCompleted);
+    document.removeEventListener("gvidtech:quiz:answered", this._onAnswered);
+    document.removeEventListener("gvidtech:quiz:completed", this._onCompleted);
   }
 })
 ```
@@ -604,10 +604,10 @@ The app dispatches custom DOM events that plugins can listen to.
 
 | Event | Data | Description |
 |-------|------|-------------|
-| `oqyplus:quiz:answered` | `{ question, selectedAnswer, isCorrect, questionIndex }` | User answered a question |
-| `oqyplus:quiz:completed` | `{ course, step, score, total, passed, questions }` | Quiz finished |
-| `oqyplus:matching:matchFound` | `{ game, pairId, matchedCount, totalPairs }` | Correct match in matching game |
-| `oqyplus:matching:gameCompleted` | `{ game, time, mistakes, isNewBestTime }` | Matching game finished |
+| `gvidtech:quiz:answered` | `{ question, selectedAnswer, isCorrect, questionIndex }` | User answered a question |
+| `gvidtech:quiz:completed` | `{ course, step, score, total, passed, questions }` | Quiz finished |
+| `gvidtech:matching:matchFound` | `{ game, pairId, matchedCount, totalPairs }` | Correct match in matching game |
+| `gvidtech:matching:gameCompleted` | `{ game, time, mistakes, isNewBestTime }` | Matching game finished |
 
 ### Listening to Events
 
@@ -620,11 +620,11 @@ activate: function(settings) {
     console.log("Event data:", data);
   };
   
-  document.addEventListener("oqyplus:quiz:answered", self._handler);
+  document.addEventListener("gvidtech:quiz:answered", self._handler);
 },
 
 deactivate: function() {
-  document.removeEventListener("oqyplus:quiz:answered", this._handler);
+  document.removeEventListener("gvidtech:quiz:answered", this._handler);
 }
 ```
 
@@ -860,7 +860,7 @@ activate: function(settings) {
 activate: function(settings) {
   var self = this;
   self._handler = function(e) { /* ... */ };
-  document.addEventListener("oqyplus:quiz:answered", self._handler);
+  document.addEventListener("gvidtech:quiz:answered", self._handler);
 }
 
 // ✗ May have `this` binding issues
@@ -1004,11 +1004,11 @@ hooks: {
       }
     };
     
-    document.addEventListener("oqyplus:quiz:answered", self._handler);
+    document.addEventListener("gvidtech:quiz:answered", self._handler);
   },
   
   deactivate: function() {
-    document.removeEventListener("oqyplus:quiz:answered", this._handler);
+    document.removeEventListener("gvidtech:quiz:answered", this._handler);
     if (this._audioContext) {
       this._audioContext.close();
       this._audioContext = null;
@@ -1254,4 +1254,4 @@ getOverride(hookName): Function | null
 
 ---
 
-*For more examples, see the `/public/plugins/` directory in the OqyPlus repository.*
+*For more examples, see the `/public/plugins/` directory in the gvidtech repository.*

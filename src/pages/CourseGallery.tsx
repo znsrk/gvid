@@ -1,32 +1,177 @@
-import React, { useState } from 'react';
-import { Course, FlashcardDeck, StandaloneQuiz, MatchingGame } from '../types/roadmap';
+import React, { useState, useRef, useEffect } from 'react';
+import { Course, FlashcardDeck, StandaloneQuiz, MatchingGame, WordScrambleGame, FillBlankGame } from '../types/roadmap';
+import { apiPost, apiFetch } from '../lib/fetch';
 
 interface CourseGalleryProps {
   courses: Course[];
   flashcardDecks?: FlashcardDeck[];
   standaloneQuizzes?: StandaloneQuiz[];
   matchingGames?: MatchingGame[];
+  wordScrambleGames?: WordScrambleGame[];
+  fillBlankGames?: FillBlankGame[];
   onSelectCourse: (course: Course) => void;
   onSelectDeck?: (deck: FlashcardDeck) => void;
   onSelectQuiz?: (quiz: StandaloneQuiz) => void;
   onSelectMatchingGame?: (game: MatchingGame) => void;
+  onSelectWordScramble?: (game: WordScrambleGame) => void;
+  onSelectFillBlank?: (game: FillBlankGame) => void;
   onNavigateToPrompt: () => void;
+  onRefresh?: () => void;
 }
 
-type TabType = 'courses' | 'flashcards' | 'quizzes' | 'matching';
+type TabType = 'courses' | 'flashcards' | 'quizzes' | 'matching' | 'scramble' | 'fill-blank';
 
 const CourseGallery: React.FC<CourseGalleryProps> = ({ 
   courses, 
   flashcardDecks = [], 
   standaloneQuizzes = [],
   matchingGames = [],
+  wordScrambleGames = [],
+  fillBlankGames = [],
   onSelectCourse, 
   onSelectDeck,
   onSelectQuiz,
   onSelectMatchingGame,
-  onNavigateToPrompt 
+  onSelectWordScramble,
+  onSelectFillBlank,
+  onNavigateToPrompt,
+  onRefresh 
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('courses');
+  const [shareToast, setShareToast] = useState<string | null>(null);
+  const [sharingId, setSharingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [savingRename, setSavingRename] = useState(false);
+  const renameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingId && renameInputRef.current) {
+      renameInputRef.current.focus();
+      renameInputRef.current.select();
+    }
+  }, [editingId]);
+
+  const startRename = (e: React.MouseEvent, id: string, currentTitle: string) => {
+    e.stopPropagation();
+    setEditingId(id);
+    setEditTitle(currentTitle);
+  };
+
+  const handleRename = async (contentType: string) => {
+    if (!editingId || !editTitle.trim() || savingRename) return;
+    setSavingRename(true);
+    try {
+      const res = await apiFetch(`/content/${contentType}/${editingId}/rename`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editTitle.trim() }),
+      });
+      if (!res.ok) throw new Error('Failed to rename');
+      onRefresh?.();
+      setShareToast('Renamed successfully!');
+      setTimeout(() => setShareToast(null), 2000);
+    } catch {
+      setShareToast('Failed to rename');
+      setTimeout(() => setShareToast(null), 2000);
+    } finally {
+      setEditingId(null);
+      setSavingRename(false);
+    }
+  };
+
+  const cancelRename = () => {
+    setEditingId(null);
+    setEditTitle('');
+  };
+
+  const handleShare = async (e: React.MouseEvent, contentType: string, item: { id: string; title: string; description?: string; coverImage?: string }) => {
+    e.stopPropagation();
+    if (sharingId) return;
+    setSharingId(item.id);
+    try {
+      const res = await apiPost('/community/share', {
+        contentType,
+        contentId: item.id,
+        title: item.title,
+        description: item.description || '',
+        coverImage: item.coverImage || null,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to share');
+      
+      // Build share link
+      const shareUrl = `${window.location.origin}?shared=${data.id}`;
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareToast('Shared! Link copied to clipboard');
+      } catch {
+        setShareToast('Shared to community!');
+      }
+      setTimeout(() => setShareToast(null), 3000);
+    } catch (err: any) {
+      // Check for duplicate share
+      if (err.message?.includes('duplicate') || err.message?.includes('unique')) {
+        setShareToast('Already shared!');
+      } else {
+        setShareToast('Failed to share');
+      }
+      setTimeout(() => setShareToast(null), 3000);
+    } finally {
+      setSharingId(null);
+    }
+  };
+
+  const ShareButton = ({ contentType, item }: { contentType: string; item: { id: string; title: string; description?: string; coverImage?: string } }) => (
+    <button 
+      className={`share-btn ${sharingId === item.id ? 'sharing' : ''}`}
+      onClick={(e) => handleShare(e, contentType, item)}
+      title="Share to community"
+      disabled={sharingId === item.id}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
+        <circle cx="18" cy="5" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </button>
+  );
+
+  const renderTitle = (id: string, title: string, contentType: string, extra?: React.ReactNode) => {
+    if (editingId === id) {
+      return (
+        <div className="rename-input-wrapper" onClick={e => e.stopPropagation()}>
+          <input
+            ref={renameInputRef}
+            className="rename-input"
+            value={editTitle}
+            onChange={e => setEditTitle(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleRename(contentType);
+              if (e.key === 'Escape') cancelRename();
+            }}
+            onBlur={() => handleRename(contentType)}
+            maxLength={100}
+            disabled={savingRename}
+          />
+        </div>
+      );
+    }
+    return (
+      <h3 className="course-title">
+        {title}
+        {extra}
+        <button className="rename-btn" onClick={e => startRename(e, id, title)} title="Rename">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+      </h3>
+    );
+  };
 
   // Filter flashcard decks to only show standalone ones (not from courses)
   const standaloneFlashcardDecks = flashcardDecks.filter(deck => deck.sourceType === 'standalone');
@@ -39,7 +184,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
     });
   };
 
-  const totalItems = courses.length + standaloneFlashcardDecks.length + standaloneQuizzes.length + matchingGames.length;
+  const totalItems = courses.length + standaloneFlashcardDecks.length + standaloneQuizzes.length + matchingGames.length + wordScrambleGames.length + fillBlankGames.length;
 
   if (totalItems === 0) {
     return (
@@ -122,6 +267,30 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
           </svg>
           Match ({matchingGames.length})
         </button>
+        <button 
+          className={`tab-btn ${activeTab === 'scramble' ? 'active' : ''}`}
+          onClick={() => setActiveTab('scramble')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 7h16"/>
+            <path d="M6 20l3-7"/>
+            <path d="M18 20l-3-7"/>
+            <path d="M7.5 13h9"/>
+          </svg>
+          Scramble ({wordScrambleGames.length})
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'fill-blank' ? 'active' : ''}`}
+          onClick={() => setActiveTab('fill-blank')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 7h16"/>
+            <path d="M4 12h8"/>
+            <path d="M14 12h6" strokeDasharray="2 2"/>
+            <path d="M4 17h12"/>
+          </svg>
+          Fill Blank ({fillBlankGames.length})
+        </button>
       </div>
 
       {activeTab === 'courses' && (
@@ -143,6 +312,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   className="course-cover" 
                   style={isImageUrl ? {} : { background: course.coverImage || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
                 >
+                  <ShareButton contentType="course" item={course} />
                   {isImageUrl ? (
                     <img src={course.coverImage} alt={course.title} onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -153,7 +323,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   )}
                 </div>
                 <div className="course-body">
-                  <h3 className="course-title">{course.title}</h3>
+                  {renderTitle(course.id, course.title, 'course')}
                   <p className="course-description">{course.description}</p>
                   <div className="course-meta">
                     <span>{course.totalSteps} steps</span>
@@ -196,6 +366,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   className="course-cover" 
                   style={isImageUrl ? {} : { background: deck.coverImage || 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}
                 >
+                  <ShareButton contentType="flashcards" item={deck} />
                   {isImageUrl ? (
                     <img src={deck.coverImage} alt={deck.title} onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -206,7 +377,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   )}
                 </div>
                 <div className="course-body">
-                  <h3 className="course-title">{deck.title}</h3>
+                  {renderTitle(deck.id, deck.title, 'flashcards')}
                   <p className="course-description">{deck.description}</p>
                   <div className="course-meta">
                     <span>{deck.cards.length} cards</span>
@@ -248,6 +419,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   className="course-cover" 
                   style={isImageUrl ? {} : { background: quiz.coverImage || 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}
                 >
+                  <ShareButton contentType="quiz" item={quiz} />
                   {isImageUrl ? (
                     <img src={quiz.coverImage} alt={quiz.title} onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -258,10 +430,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   )}
                 </div>
                 <div className="course-body">
-                  <h3 className="course-title">
-                    {quiz.title}
-                    {quiz.isRapid && <span className="rapid-tag">⚡ Rapid</span>}
-                  </h3>
+                  {renderTitle(quiz.id, quiz.title, 'quiz', quiz.isRapid && <span className="rapid-tag">⚡ Rapid</span>)}
                   <p className="course-description">{quiz.description}</p>
                   <div className="course-meta">
                     <span>{quiz.questions.length} questions</span>
@@ -303,6 +472,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   className="course-cover" 
                   style={isImageUrl ? {} : { background: game.coverImage || 'linear-gradient(135deg, #667eea 0%, #f093fb 100%)' }}
                 >
+                  <ShareButton contentType="matching" item={game} />
                   {isImageUrl ? (
                     <img src={game.coverImage} alt={game.title} onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -313,7 +483,7 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
                   )}
                 </div>
                 <div className="course-body">
-                  <h3 className="course-title">{game.title}</h3>
+                  {renderTitle(game.id, game.title, 'matching')}
                   <p className="course-description">{game.description}</p>
                   <div className="course-meta">
                     <span>{game.pairs.length} pairs</span>
@@ -329,6 +499,103 @@ const CourseGallery: React.FC<CourseGalleryProps> = ({
               <p>No matching games yet. Create one from the Generate page!</p>
             </div>
           )}
+        </div>
+      )}
+
+      {activeTab === 'scramble' && (
+        <div className="courses-grid">
+          {wordScrambleGames.map((game) => {
+            const isImageUrl = game.coverImage && (game.coverImage.startsWith('http') || game.coverImage.startsWith('data:'));
+            return (
+              <div key={game.id} className="course-card scramble-card" onClick={() => onSelectWordScramble?.(game)}>
+                <div 
+                  className="course-cover" 
+                  style={isImageUrl ? {} : { background: game.coverImage || 'linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%)' }}
+                >
+                  <ShareButton contentType="word-scramble" item={game} />
+                  {isImageUrl ? (
+                    <img src={game.coverImage} alt={game.title} onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).parentElement!.style.background = 'linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%)';
+                    }} />
+                  ) : (
+                    <span className="course-cover-placeholder">🔤</span>
+                  )}
+                </div>
+                <div className="course-body">
+                  {renderTitle(game.id, game.title, 'word-scramble')}
+                  <p className="course-description">{game.description}</p>
+                  <div className="course-meta">
+                    <span>{game.words.length} words</span>
+                    {game.bestScore != null && <span>Best: {game.bestScore}</span>}
+                    {game.timesPlayed != null && <span>Played: {game.timesPlayed}x</span>}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {wordScrambleGames.length === 0 && (
+            <div className="empty-tab">
+              <p>No word scramble games yet. Create one from the Generate page!</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'fill-blank' && (
+        <div className="courses-grid">
+          {fillBlankGames.map((game) => {
+            const isImageUrl = game.coverImage && (game.coverImage.startsWith('http') || game.coverImage.startsWith('data:'));
+            const formatTime = (seconds: number) => {
+              const mins = Math.floor(seconds / 60);
+              const secs = seconds % 60;
+              return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+            return (
+              <div key={game.id} className="course-card fill-blank-card" onClick={() => onSelectFillBlank?.(game)}>
+                <div 
+                  className="course-cover" 
+                  style={isImageUrl ? {} : { background: game.coverImage || 'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)' }}
+                >
+                  <ShareButton contentType="fill-blank" item={game} />
+                  {isImageUrl ? (
+                    <img src={game.coverImage} alt={game.title} onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).parentElement!.style.background = 'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)';
+                    }} />
+                  ) : (
+                    <span className="course-cover-placeholder">📝</span>
+                  )}
+                </div>
+                <div className="course-body">
+                  {renderTitle(game.id, game.title, 'fill-blank')}
+                  <p className="course-description">{game.description}</p>
+                  <div className="course-meta">
+                    <span>{game.sentences.length} sentences</span>
+                    {game.bestScore != null && <span>Best: {game.bestScore}%</span>}
+                    {game.bestTime && <span>Best: {formatTime(game.bestTime)}</span>}
+                    {game.timesPlayed != null && <span>Played: {game.timesPlayed}x</span>}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {fillBlankGames.length === 0 && (
+            <div className="empty-tab">
+              <p>No fill-in-the-blank games yet. Create one from the Generate page!</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Share Toast */}
+      {shareToast && (
+        <div className="share-toast">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          {shareToast}
         </div>
       )}
     </div>

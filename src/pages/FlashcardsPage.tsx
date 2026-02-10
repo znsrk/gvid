@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Flashcard, FlashcardDeck } from '../types/roadmap';
 import LatexText from '../components/LatexText';
 import { doAction, applyFilters } from '../plugins';
@@ -17,6 +17,12 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
   const [cards, setCards] = useState<Flashcard[]>(deck.cards);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [dragX, setDragX] = useState(0);
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let filteredCards = deck.cards;
@@ -33,7 +39,6 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
-    // Plugin hook: card flipped
     doAction('flashcard:flipped', { card: currentCard, isFlipped: !isFlipped, deck });
   };
 
@@ -42,7 +47,6 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
       setIsExiting(true);
       setIsTransitioning(true);
       
-      // Plugin hook: filter next card selection
       let nextIndex = currentIndex + 1;
       nextIndex = await applyFilters('flashcard:selectNext', nextIndex, { cards, currentIndex, deck });
       
@@ -68,27 +72,66 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
     }
   };
 
-  const toggleMastered = useCallback(() => {
-    if (!onUpdateDeck) return;
-    setCurrentIndex(idx => {
-      const currentCard = cards[idx];
-      if (currentCard) {
-        const newMasteredState = !currentCard.mastered;
-        const updatedCards = deck.cards.map(c => 
-          c.id === currentCard.id ? { ...c, mastered: newMasteredState } : c
-        );
-        onUpdateDeck({ ...deck, cards: updatedCards });
-        
-        // Plugin hook: card mastered status changed
-        doAction('flashcard:masteredChanged', { 
-          card: currentCard, 
-          mastered: newMasteredState, 
-          deck 
-        });
+  // Swipe / drag handlers
+  const handleSwipeAction = useCallback((dir: 'left' | 'right') => {
+    if (isTransitioning) return;
+    const currentCard = cards[currentIndex];
+    if (!currentCard || !onUpdateDeck) return;
+
+    const shouldMaster = dir === 'right';
+    if (currentCard.mastered !== shouldMaster) {
+      const updatedCards = deck.cards.map(c =>
+        c.id === currentCard.id ? { ...c, mastered: shouldMaster } : c
+      );
+      onUpdateDeck({ ...deck, cards: updatedCards });
+    }
+
+    setSwipeDirection(dir);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      if (currentIndex < cards.length - 1) {
+        setCurrentIndex(currentIndex + 1);
       }
-      return idx;
-    });
-  }, [onUpdateDeck, cards, deck]);
+      setIsFlipped(false);
+      setSwipeDirection(null);
+      setDragX(0);
+      setDragY(0);
+      setTimeout(() => setIsTransitioning(false), 100);
+    }, 350);
+  }, [isTransitioning, cards, currentIndex, deck, onUpdateDeck]);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    if (isTransitioning) return;
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    setIsDragging(false);
+  }, [isTransitioning]);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragStartRef.current) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    if (Math.abs(dx) > 5) {
+      setIsDragging(true);
+      setDragX(dx);
+      setDragY(dy * 0.3); // subtle Y-axis follow for physical card feel
+    }
+  }, []);
+
+  const handlePointerUp = useCallback(() => {
+    if (!dragStartRef.current) return;
+    const threshold = 50; // much lower threshold for easier swiping
+    if (dragX > threshold) {
+      handleSwipeAction('right');
+    } else if (dragX < -threshold) {
+      handleSwipeAction('left');
+    } else {
+      setDragX(0);
+      setDragY(0);
+    }
+    dragStartRef.current = null;
+    setIsDragging(false);
+  }, [dragX, handleSwipeAction]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === ' ' || e.key === 'Enter') {
@@ -122,10 +165,8 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
         }
         return prev;
       });
-    } else if (e.key.toLowerCase() === 'm') {
-      toggleMastered();
     }
-  }, [cards.length, isTransitioning, toggleMastered]);
+  }, [cards.length, isTransitioning]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -158,6 +199,9 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
       </div>
     );
   }
+
+  // Determine swipe hint opacity based on drag distance
+  const swipeIntensity = Math.min(Math.abs(dragX) / 100, 1);
 
   return (
     <div className="flashcards-page">
@@ -212,31 +256,70 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
         <span className="progress-text">{masteredCount} of {deck.cards.length} mastered ({progress}%)</span>
       </div>
 
-      <div className="flashcard-container" onClick={handleFlip}>
-        <div className={`flashcard-wrapper ${isTransitioning ? 'transitioning' : ''}`}>
-          <div className="flashcard-shadow-2"></div>
-          <div className="flashcard-shadow"></div>
-          <div className={`flashcard ${isFlipped ? 'flipped' : ''} ${isExiting ? 'exiting' : ''}`}>
-            <div className="flashcard-front">
-              <div className="card-content">
-                {currentCard.category && (
-                  <span className="card-category">{currentCard.category}</span>
-                )}
-                <p className="card-text"><LatexText>{currentCard.front}</LatexText></p>
+      <div className="flashcard-swipe-area">
+        {/* Swipe hint labels — positioned OUTSIDE the card container */}
+        <div className={`swipe-hint-label swipe-hint-left ${dragX < -20 ? 'visible' : ''}`}
+          style={{ opacity: dragX < 0 ? swipeIntensity : 0 }}>
+          <span>✗</span>
+          <span>Don't Know</span>
+        </div>
+
+        <div
+          className="flashcard-container"
+          ref={containerRef}
+          onClick={isDragging ? undefined : handleFlip}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+          style={{ touchAction: 'pan-y' }}
+        >
+          <div className={`flashcard-wrapper ${isTransitioning ? 'transitioning' : ''}`}>
+            <div className="flashcard-shadow-2"></div>
+            <div className="flashcard-shadow"></div>
+            <div className={`flashcard ${isFlipped ? 'flipped' : ''} ${isExiting ? 'exiting' : ''} ${swipeDirection === 'left' ? 'swipe-exit-left' : ''} ${swipeDirection === 'right' ? 'swipe-exit-right' : ''}`}
+              style={dragX !== 0 ? { transform: `translateX(${dragX}px) translateY(${dragY}px) rotate(${dragX * 0.08}deg)${isFlipped ? ' rotateY(180deg)' : ''}`, transition: 'none' } : undefined}
+            >
+              <div className="flashcard-front">
+                <div className="card-content">
+                  {currentCard.category && (
+                    <span className="card-category">{currentCard.category}</span>
+                  )}
+                  <p className="card-text"><LatexText>{currentCard.front}</LatexText></p>
+                </div>
+                <span className="flip-hint">Click or press Space to flip</span>
               </div>
-              <span className="flip-hint">Click or press Space to flip</span>
-            </div>
-            <div className="flashcard-back">
-              <div className="card-content">
-                <p className="card-text"><LatexText>{currentCard.back}</LatexText></p>
+              <div className="flashcard-back">
+                <div className="card-content">
+                  <p className="card-text"><LatexText>{currentCard.back}</LatexText></p>
+                </div>
+                <span className="flip-hint">Click or press Space to flip back</span>
               </div>
-              <span className="flip-hint">Click or press Space to flip back</span>
             </div>
           </div>
+        </div>
+
+        <div className={`swipe-hint-label swipe-hint-right ${dragX > 20 ? 'visible' : ''}`}
+          style={{ opacity: dragX > 0 ? swipeIntensity : 0 }}>
+          <span>✓</span>
+          <span>I Know</span>
         </div>
       </div>
 
       <div className="flashcards-controls">
+        <button 
+          className="btn btn-swipe-left"
+          onClick={() => handleSwipeAction('left')}
+          disabled={isTransitioning}
+          title="I don't know"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          Don't Know
+        </button>
+
         <button 
           className="btn btn-secondary" 
           onClick={handlePrev}
@@ -247,27 +330,6 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
           </svg>
           Previous
         </button>
-        
-        <button 
-          className={`btn ${currentCard.mastered ? 'btn-primary' : 'btn-secondary'}`}
-          onClick={(e) => { e.stopPropagation(); toggleMastered(); }}
-        >
-          {currentCard.mastered ? (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              Mastered
-            </>
-          ) : (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-              </svg>
-              Mark Mastered
-            </>
-          )}
-        </button>
 
         <button 
           className="btn btn-secondary" 
@@ -277,6 +339,18 @@ const FlashcardsPage: React.FC<FlashcardsPageProps> = ({ deck, onBack, onUpdateD
           Next
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+
+        <button 
+          className="btn btn-swipe-right"
+          onClick={() => handleSwipeAction('right')}
+          disabled={isTransitioning}
+          title="I know this"
+        >
+          I Know
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="20 6 9 17 4 12"/>
           </svg>
         </button>
       </div>

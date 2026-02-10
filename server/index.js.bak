@@ -1,0 +1,1312 @@
+import express from 'express';
+import cors from 'cors';
+import multer from 'multer';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load environment variables from project root .env (single source of truth)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+
+const app = express();
+const PORT = 3001;
+
+// Data storage paths
+const DATA_DIR = path.join(__dirname, 'data');
+const ROADMAPS_FILE = path.join(DATA_DIR, 'roadmaps.json');
+const FLASHCARDS_FILE = path.join(DATA_DIR, 'flashcards.json');
+const QUIZZES_FILE = path.join(DATA_DIR, 'quizzes.json');
+const MATCHING_GAMES_FILE = path.join(DATA_DIR, 'matching-games.json');
+
+// Ensure data directory exists
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+// Helper functions for persistence
+function loadRoadmaps() {
+  try {
+    if (fs.existsSync(ROADMAPS_FILE)) {
+      return JSON.parse(fs.readFileSync(ROADMAPS_FILE, 'utf-8'));
+    }
+  } catch (error) {
+    console.error('Error loading roadmaps:', error);
+  }
+  return [];
+}
+
+function saveRoadmaps(roadmaps) {
+  fs.writeFileSync(ROADMAPS_FILE, JSON.stringify(roadmaps, null, 2));
+}
+
+function loadFlashcards() {
+  try {
+    if (fs.existsSync(FLASHCARDS_FILE)) {
+      return JSON.parse(fs.readFileSync(FLASHCARDS_FILE, 'utf-8'));
+    }
+  } catch (error) {
+    console.error('Error loading flashcards:', error);
+  }
+  return [];
+}
+
+function saveFlashcards(flashcards) {
+  fs.writeFileSync(FLASHCARDS_FILE, JSON.stringify(flashcards, null, 2));
+}
+
+function loadQuizzes() {
+  try {
+    if (fs.existsSync(QUIZZES_FILE)) {
+      return JSON.parse(fs.readFileSync(QUIZZES_FILE, 'utf-8'));
+    }
+  } catch (error) {
+    console.error('Error loading quizzes:', error);
+  }
+  return [];
+}
+
+function saveQuizzes(quizzes) {
+  fs.writeFileSync(QUIZZES_FILE, JSON.stringify(quizzes, null, 2));
+}
+
+function loadMatchingGames() {
+  try {
+    if (fs.existsSync(MATCHING_GAMES_FILE)) {
+      return JSON.parse(fs.readFileSync(MATCHING_GAMES_FILE, 'utf-8'));
+    }
+  } catch (error) {
+    console.error('Error loading matching games:', error);
+  }
+  return [];
+}
+
+function saveMatchingGames(games) {
+  fs.writeFileSync(MATCHING_GAMES_FILE, JSON.stringify(games, null, 2));
+}
+
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Helper function to fix malformed JSON using AI
+async function fixJsonWithAI(malformedJson, errorMessage, originalPrompt) {
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const fixPrompt = `The following JSON response has an error. Please fix it and return ONLY valid JSON.
+
+Error message: ${errorMessage}
+
+Original request context: ${originalPrompt}
+
+Malformed JSON:
+${malformedJson}
+
+Return ONLY the corrected valid JSON, no explanations or markdown.`;
+
+    const result = await model.generateContent(fixPrompt);
+    let responseText = result.response.text();
+    responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    return JSON.parse(responseText);
+  } catch (error) {
+    console.error('Failed to fix JSON with AI:', error);
+    throw error;
+  }
+}
+
+// Helper function to parse JSON with retry
+async function parseJsonWithRetry(responseText, originalPrompt, maxRetries = 2) {
+  let lastError;
+  let currentText = responseText;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      // Clean up common issues
+      currentText = currentText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      return JSON.parse(currentText);
+    } catch (error) {
+      lastError = error;
+      console.error(`JSON parse attempt ${attempt + 1} failed:`, error.message);
+      
+      if (attempt < maxRetries) {
+        console.log('Attempting to fix JSON with AI...');
+        try {
+          const fixed = await fixJsonWithAI(currentText, error.message, originalPrompt);
+          return fixed;
+        } catch (fixError) {
+          currentText = responseText; // Reset for next attempt
+        }
+      }
+    }
+  }
+  
+  throw lastError;
+}
+
+// Helper function to read file content
+async function readFileContent(filePath, mimeType) {
+  try {
+    if (mimeType === 'application/pdf') {
+      // For PDF files, we'll use pdf-parse
+      const pdfParse = (await import('pdf-parse')).default;
+      const dataBuffer = fs.readFileSync(filePath);
+      const data = await pdfParse(dataBuffer);
+      return data.text;
+    } else {
+      // For text files
+      return fs.readFileSync(filePath, 'utf-8');
+    }
+  } catch (error) {
+    console.error('Error reading file:', error);
+    return '';
+  }
+}
+
+// Generate roadmap endpoint
+app.post('/api/generate-roadmap', upload.array('files'), async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    const files = req.files || [];
+
+    // Read content from uploaded files
+    let fileContents = '';
+    for (const file of files) {
+      const content = await readFileContent(file.path, file.mimetype);
+      fileContents += `\n\n--- Content from ${file.originalname} ---\n${content}`;
+      
+      // Clean up uploaded file
+      fs.unlinkSync(file.path);
+    }
+
+    // Construct the prompt for Gemini - Phase 1: Generate roadmap structure only
+    const systemPrompt = `You are an expert educational course designer. Create a learning roadmap STRUCTURE based on the provided material/topic.
+
+IMPORTANT: Generate the roadmap OUTLINE only. Detailed tasks and materials for each step will be generated separately when the user opens each step.
+
+Return this exact JSON structure:
+
+{
+  "roadmap": {
+    "title": "Course title",
+    "description": "What this course teaches",
+    "totalSteps": <number>,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Step title - be specific",
+        "description": "What this step covers and learning objectives",
+        "estimatedTime": "e.g., 30 mins or 1 hour (keep between 20 mins to 1.5 hours)",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ]
+  }
+}
+
+Guidelines:
+1. Create 5-12 steps with logical progression from basics to advanced
+2. Make step titles and descriptions very specific and informative
+3. Each step should have clear learning objectives in the description
+4. Base the structure on the provided materials if available
+5. IMPORTANT: Set "unlocked": true ONLY for the first step (step-1), all other steps should have "unlocked": false
+
+Return ONLY valid JSON, no markdown or extra text.`;
+
+    const userContent = `
+${prompt ? `User's learning goal: ${prompt}` : ''}
+
+${fileContents ? `Provided learning materials:${fileContents}` : ''}
+
+Please create a comprehensive learning roadmap based on the above information.`;
+
+    // Call Gemini API
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: userContent }
+    ]);
+
+    const response = await result.response;
+    let responseText = response.text();
+
+    // Clean up the response - remove markdown code blocks if present
+    responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    // Parse the JSON response
+    let roadmapData;
+    try {
+      roadmapData = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('Failed to parse Gemini response:', responseText);
+      throw new Error('Failed to parse AI response as JSON');
+    }
+
+    // Include original materials for later step generation
+    roadmapData.originalMaterials = fileContents;
+    
+    // Pre-generate first step details immediately
+    if (roadmapData.roadmap && roadmapData.roadmap.steps && roadmapData.roadmap.steps.length > 0) {
+      const firstStep = roadmapData.roadmap.steps[0];
+      
+      try {
+        const stepSystemPrompt = `You are an expert educational content curator. Generate learning content for a specific course step, focusing on curated external resources (especially YouTube) rather than walls of text.
+
+Course: "${roadmapData.roadmap.title}"
+Course Description: ${roadmapData.roadmap.description}
+Current Step: "${firstStep.title}"
+Step Description: ${firstStep.description}
+
+Generate tasks and learning materials that prioritize video resources and external learning materials over long text content.
+
+Return this exact JSON structure:
+
+{
+  "tasks": [
+    {
+      "id": "task-1-1",
+      "title": "Task title",
+      "description": "Brief, actionable instruction",
+      "completed": false
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat-1-1",
+      "title": "Video: [Descriptive title of what to search]",
+      "type": "video",
+      "description": "Brief description of what this video should cover",
+      "youtubeSearch": "exact YouTube search query to find this educational content",
+      "url": "https://www.youtube.com/results?search_query=[URL-encoded search query]"
+    },
+    {
+      "id": "mat-1-2",
+      "title": "Key Concepts Summary",
+      "type": "summary",
+      "content": "Brief bullet points (max 100 words) summarizing the core concepts. Use LaTeX for math: $formula$"
+    },
+    {
+      "id": "mat-1-3",
+      "title": "Practice Exercise",
+      "type": "exercise",
+      "content": "Short, practical exercise to apply what was learned"
+    }
+  ]
+}
+
+Guidelines:
+1. Create 2-3 brief, actionable tasks
+2. Include 1-2 YouTube video search recommendations with good search queries
+3. Add ONE brief summary (bullet points, max 100 words) - NOT walls of text
+4. Include one practical exercise
+5. YouTube search queries should be specific and likely to find high-quality educational content
+
+Return ONLY valid JSON.`;
+
+        const stepResult = await model.generateContent([
+          { text: stepSystemPrompt },
+          { text: `Generate curated learning content for step 1: "${firstStep.title}"${prompt ? `\nOriginal learning goal: ${prompt}` : ''}` }
+        ]);
+        
+        let stepResponseText = stepResult.response.text();
+        stepResponseText = stepResponseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        
+        const stepDetails = JSON.parse(stepResponseText);
+        
+        // Update first step with pre-generated details
+        roadmapData.roadmap.steps[0] = {
+          ...firstStep,
+          tasks: stepDetails.tasks || [],
+          materials: stepDetails.materials || [],
+          detailsLoaded: true,
+          unlocked: true
+        };
+      } catch (stepError) {
+        console.error('Error pre-generating first step:', stepError);
+        // Continue with roadmap without pre-generated step
+      }
+    }
+    
+    res.json(roadmapData);
+  } catch (error) {
+    console.error('Error generating roadmap:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate roadmap', 
+      details: error.message 
+    });
+  }
+});
+
+// ============ PERSISTENCE ENDPOINTS ============
+
+// Get all roadmaps
+app.get('/api/roadmaps', (req, res) => {
+  const roadmaps = loadRoadmaps();
+  res.json(roadmaps);
+});
+
+// Save a new roadmap
+app.post('/api/roadmaps', (req, res) => {
+  const roadmap = req.body;
+  const roadmaps = loadRoadmaps();
+  roadmaps.unshift(roadmap);
+  saveRoadmaps(roadmaps);
+  res.json({ success: true, roadmap });
+});
+
+// Update a roadmap
+app.put('/api/roadmaps/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedRoadmap = req.body;
+  let roadmaps = loadRoadmaps();
+  roadmaps = roadmaps.map(r => r.id === id ? updatedRoadmap : r);
+  saveRoadmaps(roadmaps);
+  res.json({ success: true, roadmap: updatedRoadmap });
+});
+
+// Delete a roadmap
+app.delete('/api/roadmaps/:id', (req, res) => {
+  const { id } = req.params;
+  let roadmaps = loadRoadmaps();
+  roadmaps = roadmaps.filter(r => r.id !== id);
+  saveRoadmaps(roadmaps);
+  res.json({ success: true });
+});
+
+// ============ STEP DETAILS GENERATION (Phase 2) ============
+
+app.post('/api/generate-step-details', async (req, res) => {
+  try {
+    const { step, courseTitle, courseDescription, originalPrompt, originalMaterials } = req.body;
+
+    const systemPrompt = `You are an expert educational content curator. Generate learning content for a specific course step, focusing on curated external resources (especially YouTube) rather than walls of text.
+
+Course: "${courseTitle}"
+Course Description: ${courseDescription}
+Current Step: "${step.title}"
+Step Description: ${step.description}
+
+Generate tasks and learning materials that prioritize video resources and external learning materials over long text content.
+
+Return this exact JSON structure:
+
+{
+  "tasks": [
+    {
+      "id": "task-${step.stepNumber}-1",
+      "title": "Task title",
+      "description": "Brief, actionable instruction",
+      "completed": false
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat-${step.stepNumber}-1",
+      "title": "Video: [Descriptive title of what to search]",
+      "type": "video",
+      "description": "Brief description of what this video should cover",
+      "youtubeSearch": "exact YouTube search query to find this educational content",
+      "url": "https://www.youtube.com/results?search_query=[URL-encoded search query]"
+    },
+    {
+      "id": "mat-${step.stepNumber}-2",
+      "title": "Key Concepts Summary",
+      "type": "summary",
+      "content": "Brief bullet points (max 100 words) summarizing the core concepts. Use LaTeX for math: $formula$"
+    },
+    {
+      "id": "mat-${step.stepNumber}-3",
+      "title": "Practice Exercise",
+      "type": "exercise",
+      "content": "Short, practical exercise to apply what was learned"
+    }
+  ]
+}
+
+Guidelines:
+1. Create 2-3 brief, actionable tasks
+2. Include 1-2 YouTube video search recommendations with good search queries
+3. Add ONE brief summary (bullet points, max 100 words) - NOT walls of text
+4. Include one practical exercise
+5. YouTube search queries should be specific and likely to find high-quality educational content
+6. Prioritize well-known educational channels in search queries (add terms like "tutorial", "explained", "course")
+${originalMaterials ? '\n7. Reference the provided source materials for context' : ''}
+
+Return ONLY valid JSON.`;
+
+    const userContent = `Generate curated learning content for step ${step.stepNumber}: "${step.title}"
+    
+${originalPrompt ? `Original learning goal: ${originalPrompt}` : ''}
+${originalMaterials ? `\nSource materials context:\n${originalMaterials.substring(0, 2000)}` : ''}`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: userContent }
+    ]);
+
+    let responseText = result.response.text();
+    const stepDetails = await parseJsonWithRetry(responseText, `Step details for: ${step.title}`);
+    res.json(stepDetails);
+  } catch (error) {
+    console.error('Error generating step details:', error);
+    res.status(500).json({ error: 'Failed to generate step details', details: error.message });
+  }
+});
+
+// ============ TEST GENERATION ============
+
+app.post('/api/generate-test', async (req, res) => {
+  try {
+    const { step, courseTitle } = req.body;
+
+    const systemPrompt = `You are an expert educational assessment creator. Generate a comprehensive quiz/test for a course step.
+
+Course: "${courseTitle}"
+Step: "${step.title}"
+Step Content: ${step.description}
+${step.materials?.length > 0 ? `Materials covered:\n${step.materials.map(m => `- ${m.title}: ${m.content?.substring(0, 500)}`).join('\n')}` : ''}
+
+Create a THOROUGH quiz to test understanding of this step's content.
+
+Return this exact JSON structure:
+
+{
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Question text",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correctAnswer": 0,
+      "explanation": "Why this answer is correct"
+    }
+  ]
+}
+
+Guidelines:
+1. Decide the appropriate number of questions based on the complexity and depth of the step content (typically 5-25 questions)
+2. For simple topics, use fewer questions (5-10). For complex topics, use more (15-25)
+3. Mix difficulty levels proportionally: ~30% easy, ~50% medium, ~20% hard
+4. Options should be plausible - avoid obviously wrong answers
+5. Explanations should be educational and detailed
+6. Questions should test actual understanding, not just memorization
+7. Cover all aspects of the step content thoroughly
+8. Include conceptual, practical, and application-based questions
+
+Return ONLY valid JSON.`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    const testData = JSON.parse(responseText);
+    res.json({
+      id: `test-${step.id}`,
+      questions: testData.questions,
+      completed: false,
+      totalQuestions: testData.questions.length
+    });
+  } catch (error) {
+    console.error('Error generating test:', error);
+    res.status(500).json({ error: 'Failed to generate test', details: error.message });
+  }
+});
+
+// ============ PLUGIN CODE AI ASSIST ============
+
+app.post('/api/modify-plugin-code', async (req, res) => {
+  try {
+    const { code, prompt } = req.body;
+
+    if (!code || !prompt) {
+      return res.status(400).json({ error: 'Missing code or prompt' });
+    }
+
+    const systemPrompt = `You are an expert JavaScript plugin developer. The user wants to modify their gvidtech plugin code based on their request.
+
+CURRENT PLUGIN CODE:
+\`\`\`javascript
+${code}
+\`\`\`
+
+USER REQUEST: "${prompt}"
+
+gvidtech Plugin Structure Reference:
+- Plugins use this structure: (function() { return { manifest: {...}, activate: function(api) {...}, deactivate: function(api) {...} }; })();
+- manifest includes: id, name, version, description, author, settings (array of setting objects)
+- settings array items: { key, type, label, description, default }
+- api methods: addFilter, addAction, getSetting, getState, setState, registerOverride, log, etc.
+
+Instructions:
+1. Apply the user's requested modification to the plugin code
+2. Keep all existing functionality intact unless specifically asked to remove it
+3. Follow JavaScript best practices
+4. Maintain the plugin structure
+5. Return ONLY the complete modified JavaScript code, nothing else
+6. Do NOT wrap in markdown code blocks
+7. The code must be valid JavaScript that can be executed immediately
+
+Return the complete modified plugin code:`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    // Clean up any markdown code blocks if present
+    responseText = responseText.replace(/```javascript\n?/g, '').replace(/```js\n?/g, '').replace(/```\n?/g, '').trim();
+
+    res.json({ code: responseText });
+  } catch (error) {
+    console.error('Error modifying plugin code:', error);
+    res.status(500).json({ error: 'Failed to modify plugin code', details: error.message });
+  }
+});
+
+// ============ IMAGE GENERATION ============
+
+app.post('/api/generate-image', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    
+    // Use AI to extract relevant image keywords
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const keywordPrompt = `Given this course/topic title: "${prompt}"
+    
+Return a single word or short phrase (max 2 words) that would work well as a search term for finding a relevant educational/professional image. 
+Examples: "programming" for coding courses, "mathematics" for math, "science" for chemistry, "business" for economics, "art" for design courses.
+
+Return ONLY the keyword(s), nothing else.`;
+
+    let keyword = 'education';
+    try {
+      const keywordResult = await model.generateContent(keywordPrompt);
+      keyword = keywordResult.response.text().trim().toLowerCase().replace(/[^a-z\s]/g, '').substring(0, 30);
+    } catch (e) {
+      console.log('Using default keyword');
+    }
+    
+    // Use Unsplash API to get image URLs (following hotlinking guidelines)
+    const unsplashAccessKey = process.env.UNSPLASH_ACCESS_KEY;
+    
+    if (unsplashAccessKey) {
+      try {
+        const response = await fetch(
+          `https://api.unsplash.com/photos/random?query=${encodeURIComponent(keyword)}&orientation=landscape&w=800&h=400`,
+          {
+            headers: {
+              'Authorization': `Client-ID ${unsplashAccessKey}`
+            }
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          // Use the URLs returned by the API as per Unsplash hotlinking guidelines
+          const imageUrl = data.urls?.regular || data.urls?.small;
+          
+          res.json({ 
+            imageUrl, 
+            keyword,
+            photographer: data.user?.name,
+            photographerUrl: data.user?.links?.html
+          });
+          return;
+        }
+      } catch (unsplashError) {
+        console.error('Unsplash API error:', unsplashError);
+      }
+    }
+    
+    // Fallback: return null to use gradient
+    res.json({ 
+      imageUrl: null, 
+      gradient: 'linear-gradient(135deg, #0b4c8a 0%, #6366f1 100%)' 
+    });
+  } catch (error) {
+    console.error('Error generating image:', error);
+    // Return a default gradient if image generation fails
+    res.json({ 
+      imageUrl: null, 
+      gradient: 'linear-gradient(135deg, #0b4c8a 0%, #6366f1 100%)' 
+    });
+  }
+});
+
+// ============ FLASHCARD GENERATION ============
+
+app.post('/api/generate-flashcards', upload.array('files'), async (req, res) => {
+  try {
+    const prompt = req.body?.prompt || '';
+    const files = req.files || [];
+
+    // Read content from uploaded files
+    let fileContents = '';
+    for (const file of files) {
+      const content = await readFileContent(file.path, file.mimetype);
+      fileContents += `\n\n--- Content from ${file.originalname} ---\n${content}`;
+      fs.unlinkSync(file.path);
+    }
+
+    const systemPrompt = `You are an expert educational content creator. Generate a comprehensive set of flashcards for studying.
+
+IMPORTANT: For math expressions, use simple notation like x^2 for exponents, sqrt(x) for square roots. Do NOT use backslash LaTeX commands as they break JSON parsing.
+
+Return this exact JSON structure:
+
+{
+  "title": "Flashcard deck title",
+  "description": "Brief description of what these flashcards cover",
+  "cards": [
+    {
+      "id": "card-1",
+      "front": "Question or term",
+      "back": "Answer or definition",
+      "category": "Category name",
+      "difficulty": "easy|medium|hard",
+      "mastered": false
+    }
+  ]
+}
+
+Guidelines:
+1. Create 15-30 flashcards depending on topic complexity
+2. Front should be a question, term, or concept to recall
+3. Back should be a clear, concise answer or definition
+4. For math: use x^2 not \\x^2, use fractions as a/b, use sqrt() for roots
+5. Group cards by category when applicable
+6. Mix difficulty levels: ~40% easy, ~40% medium, ~20% hard
+7. Make cards specific and testable, not vague
+
+Return ONLY valid JSON with no backslash escape sequences.`;
+
+    const userContent = `Create flashcards for: ${prompt || 'the provided materials'}
+${fileContents ? `\nSource materials:${fileContents.substring(0, 5000)}` : ''}`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: userContent }
+    ]);
+
+    let responseText = result.response.text();
+    const flashcardData = await parseJsonWithRetry(responseText, 'Generate flashcards');
+    res.json(flashcardData);
+  } catch (error) {
+    console.error('Error generating flashcards:', error);
+    res.status(500).json({ error: 'Failed to generate flashcards', details: error.message });
+  }
+});
+
+// ============ STANDALONE QUIZ GENERATION ============
+
+app.post('/api/generate-standalone-quiz', upload.array('files'), async (req, res) => {
+  try {
+    const prompt = req.body?.prompt || '';
+    const files = req.files || [];
+
+    // Read content from uploaded files
+    let fileContents = '';
+    for (const file of files) {
+      const content = await readFileContent(file.path, file.mimetype);
+      fileContents += `\n\n--- Content from ${file.originalname} ---\n${content}`;
+      fs.unlinkSync(file.path);
+    }
+
+    const systemPrompt = `You are an expert quiz creator. Generate a comprehensive quiz on the given topic.
+
+IMPORTANT: For math expressions, use simple notation like x^2 for exponents, sqrt(x) for square roots. Do NOT use backslash LaTeX commands as they break JSON parsing.
+
+Return this exact JSON structure:
+
+{
+  "title": "Quiz title",
+  "description": "Brief description of what this quiz covers",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Question text",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correctAnswer": 0,
+      "explanation": "Why this answer is correct"
+    }
+  ]
+}
+
+Guidelines:
+1. Create 10-20 questions based on topic complexity
+2. Mix difficulty levels: ~30% easy, ~50% medium, ~20% hard
+3. For math: use x^2 not \\x^2, use fractions as a/b, use sqrt() for roots
+4. All options should be plausible - avoid obviously wrong answers
+5. Explanations should be educational and help learning
+6. Questions should test understanding, not just memorization
+7. Cover the topic comprehensively
+
+Return ONLY valid JSON with no backslash escape sequences.`;
+
+    const userContent = `Create a quiz about: ${prompt || 'the provided materials'}
+${fileContents ? `\nSource materials:${fileContents.substring(0, 5000)}` : ''}`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: userContent }
+    ]);
+
+    let responseText = result.response.text();
+    const quizData = await parseJsonWithRetry(responseText, 'Generate quiz');
+    res.json(quizData);
+  } catch (error) {
+    console.error('Error generating quiz:', error);
+    res.status(500).json({ error: 'Failed to generate quiz', details: error.message });
+  }
+});
+
+// ============ COURSE FLASHCARD GENERATION ============
+
+app.post('/api/generate-course-flashcards', async (req, res) => {
+  try {
+    const { courseTitle, courseDescription, steps } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    // Step 1: Secretly generate comprehensive educational content for better context
+    const contextPrompt = `You are an expert educator. Generate comprehensive educational content for this course that will be used internally to create high-quality flashcards.
+
+Course: "${courseTitle}"
+Description: ${courseDescription}
+Steps:
+${steps.map((s, i) => `${i + 1}. ${s.title}: ${s.description}`).join('\n')}
+
+For each step, write a detailed explanation (200-300 words) covering:
+- Key concepts and definitions
+- Important facts and figures
+- Relationships between concepts
+- Common misconceptions to address
+- Examples and applications
+
+Return as JSON:
+{
+  "stepContent": [
+    {
+      "stepTitle": "Step title",
+      "content": "Detailed educational content..."
+    }
+  ]
+}
+
+Return ONLY valid JSON.`;
+
+    const contextResult = await model.generateContent(contextPrompt);
+    let contextText = contextResult.response.text();
+    contextText = contextText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    let secretContext = '';
+    try {
+      const contextData = JSON.parse(contextText);
+      secretContext = contextData.stepContent?.map(s => `## ${s.stepTitle}\n${s.content}`).join('\n\n') || '';
+    } catch (e) {
+      secretContext = contextText; // Use raw text if parsing fails
+    }
+
+    // Step 2: Generate flashcards with the enhanced context
+    const systemPrompt = `You are an expert educational content creator. Generate flashcards that summarize an entire course.
+
+Course: "${courseTitle}"
+Description: ${courseDescription}
+
+DETAILED COURSE CONTENT:
+${secretContext}
+
+Create flashcards that cover the key concepts from all course steps.
+
+Return this exact JSON structure:
+
+{
+  "cards": [
+    {
+      "id": "card-1",
+      "front": "Question or term",
+      "back": "Answer or definition",
+      "category": "Step or topic name",
+      "difficulty": "easy|medium|hard",
+      "mastered": false
+    }
+  ]
+}
+
+Guidelines:
+1. Create 2-4 flashcards per course step
+2. Focus on the most important concepts
+3. Use LaTeX for any math expressions (use $ for inline)
+4. Cards should help with course review and retention
+5. Make front questions specific and testable
+6. Make back answers concise but complete
+
+Return ONLY valid JSON.`;
+
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    const flashcardData = await parseJsonWithRetry(responseText, `Flashcards for course: ${courseTitle}`);
+    res.json(flashcardData);
+  } catch (error) {
+    console.error('Error generating course flashcards:', error);
+    res.status(500).json({ error: 'Failed to generate flashcards', details: error.message });
+  }
+});
+
+// ============ STEP MATERIAL FLASHCARD GENERATION ============
+
+app.post('/api/generate-step-flashcards', async (req, res) => {
+  try {
+    const { stepTitle, stepDescription, materials } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    const materialsContent = materials?.map(m => `${m.title}: ${m.content || m.description || ''}`).join('\n\n') || '';
+
+    // Step 1: Secretly generate comprehensive educational content for better context
+    const contextPrompt = `You are an expert educator. Generate comprehensive educational content for this learning step that will be used internally to create high-quality flashcards.
+
+Step: "${stepTitle}"
+Description: ${stepDescription}
+
+Existing Materials:
+${materialsContent}
+
+Write a detailed educational explanation (400-600 words) covering:
+- All key concepts and definitions mentioned or implied
+- Important facts, figures, and formulas
+- Relationships between concepts
+- Common misconceptions
+- Real-world examples and applications
+- Practice tips and memory aids
+
+Be comprehensive and educational. This content won't be shown to users but will help create better flashcards.
+
+Return as plain text (no JSON).`;
+
+    const contextResult = await model.generateContent(contextPrompt);
+    const secretContext = contextResult.response.text();
+
+    // Step 2: Generate flashcards with the enhanced context
+    const systemPrompt = `You are an expert educational content creator. Generate flashcards based on the learning materials and context provided.
+
+Step: "${stepTitle}"
+Description: ${stepDescription}
+
+COMPREHENSIVE EDUCATIONAL CONTENT:
+${secretContext}
+
+Create flashcards that help memorize and understand ALL key concepts from this material.
+
+Return this exact JSON structure:
+
+{
+  "flashcards": [
+    {
+      "id": "card-1",
+      "front": "Question or term (can include LaTeX like $x^2$ for math)",
+      "back": "Answer or definition",
+      "category": "${stepTitle}",
+      "difficulty": "easy|medium|hard",
+      "mastered": false
+    }
+  ]
+}
+
+Guidelines:
+1. Create 10-20 flashcards based on material complexity
+2. Cover ALL key concepts, definitions, and important facts
+3. Use LaTeX for any math expressions (use $ for inline)
+4. Mix difficulty levels appropriately (easy, medium, hard)
+5. Front should be a specific question or term to recall
+6. Back should be a clear, complete but concise answer
+7. Include cards for formulas, definitions, examples, and applications
+
+Return ONLY valid JSON.`;
+
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    const flashcardData = await parseJsonWithRetry(responseText, `Flashcards for step: ${stepTitle}`);
+    res.json(flashcardData);
+  } catch (error) {
+    console.error('Error generating step flashcards:', error);
+    res.status(500).json({ error: 'Failed to generate flashcards', details: error.message });
+  }
+});
+
+// ============ STEP MATERIAL MATCHING GAME GENERATION ============
+
+app.post('/api/generate-step-matching-game', async (req, res) => {
+  try {
+    const { stepTitle, stepDescription, materials } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    const materialsContent = materials?.map(m => `${m.title}: ${m.content || m.description || ''}`).join('\n\n') || '';
+
+    // Step 1: Secretly generate comprehensive educational content for better context
+    const contextPrompt = `You are an expert educator. Generate comprehensive educational content for this learning step that will be used internally to create a high-quality matching game.
+
+Step: "${stepTitle}"
+Description: ${stepDescription}
+
+Existing Materials:
+${materialsContent}
+
+Write a detailed educational explanation (300-400 words) covering:
+- All key terms and their definitions
+- Important concepts and relationships
+- Facts, formulas, and figures worth memorizing
+- Examples that illustrate concepts
+
+Be comprehensive. This content won't be shown to users but will help create better matching pairs.
+
+Return as plain text (no JSON).`;
+
+    const contextResult = await model.generateContent(contextPrompt);
+    const secretContext = contextResult.response.text();
+
+    // Step 2: Generate matching game with enhanced context
+    const systemPrompt = `You are an expert educational game creator. Generate a matching game based on the learning materials provided.
+
+Step: "${stepTitle}"
+Description: ${stepDescription}
+
+COMPREHENSIVE EDUCATIONAL CONTENT:
+${secretContext}
+
+Create a matching game that helps memorize and understand the key concepts.
+
+Return this exact JSON structure:
+
+{
+  "pairs": [
+    {
+      "id": "pair-1",
+      "question": "Question or term",
+      "answer": "Matching answer or definition"
+    }
+  ]
+}
+
+Guidelines:
+1. Create 10-12 pairs (question-answer)
+2. Questions and answers should be concise (max 50 characters each)
+3. Use LaTeX for math expressions where appropriate (use $ for inline)
+4. Make questions distinct enough to be identifiable
+5. Focus on the most important concepts
+6. Include a mix of terms, definitions, formulas, and facts
+
+Return ONLY valid JSON.`;
+
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    const gameData = await parseJsonWithRetry(responseText, `Matching game for step: ${stepTitle}`);
+    res.json(gameData);
+  } catch (error) {
+    console.error('Error generating step matching game:', error);
+    res.status(500).json({ error: 'Failed to generate matching game', details: error.message });
+  }
+});
+
+// Get step details (for when step is loaded individually)
+app.get('/api/roadmaps/:roadmapId/steps/:stepId', (req, res) => {
+  const { roadmapId, stepId } = req.params;
+  const roadmaps = loadRoadmaps();
+  const roadmap = roadmaps.find(r => r.id === roadmapId);
+  
+  if (!roadmap) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+  
+  const step = roadmap.steps.find(s => s.id === stepId);
+  
+  if (!step) {
+    return res.status(404).json({ error: 'Step not found' });
+  }
+  
+  res.json(step);
+});
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// ============ FLASHCARD DECK PERSISTENCE ============
+
+app.get('/api/flashcard-decks', (req, res) => {
+  const decks = loadFlashcards();
+  res.json(decks);
+});
+
+app.post('/api/flashcard-decks', (req, res) => {
+  const deck = req.body;
+  const decks = loadFlashcards();
+  decks.unshift(deck);
+  saveFlashcards(decks);
+  res.json({ success: true, deck });
+});
+
+app.put('/api/flashcard-decks/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedDeck = req.body;
+  let decks = loadFlashcards();
+  decks = decks.map(d => d.id === id ? updatedDeck : d);
+  saveFlashcards(decks);
+  res.json({ success: true, deck: updatedDeck });
+});
+
+app.delete('/api/flashcard-decks/:id', (req, res) => {
+  const { id } = req.params;
+  let decks = loadFlashcards();
+  decks = decks.filter(d => d.id !== id);
+  saveFlashcards(decks);
+  res.json({ success: true });
+});
+
+// ============ STANDALONE QUIZ PERSISTENCE ============
+
+app.get('/api/standalone-quizzes', (req, res) => {
+  const quizzes = loadQuizzes();
+  res.json(quizzes);
+});
+
+app.post('/api/standalone-quizzes', (req, res) => {
+  const quiz = req.body;
+  const quizzes = loadQuizzes();
+  quizzes.unshift(quiz);
+  saveQuizzes(quizzes);
+  res.json({ success: true, quiz });
+});
+
+app.put('/api/standalone-quizzes/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedQuiz = req.body;
+  let quizzes = loadQuizzes();
+  quizzes = quizzes.map(q => q.id === id ? updatedQuiz : q);
+  saveQuizzes(quizzes);
+  res.json({ success: true, quiz: updatedQuiz });
+});
+
+app.delete('/api/standalone-quizzes/:id', (req, res) => {
+  const { id } = req.params;
+  let quizzes = loadQuizzes();
+  quizzes = quizzes.filter(q => q.id !== id);
+  saveQuizzes(quizzes);
+  res.json({ success: true });
+});
+
+// ============ MATCHING GAME PERSISTENCE ============
+
+app.get('/api/matching-games', (req, res) => {
+  const games = loadMatchingGames();
+  res.json(games);
+});
+
+app.post('/api/matching-games', (req, res) => {
+  const game = req.body;
+  const games = loadMatchingGames();
+  games.unshift(game);
+  saveMatchingGames(games);
+  res.json({ success: true, game });
+});
+
+app.put('/api/matching-games/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedGame = req.body;
+  let games = loadMatchingGames();
+  games = games.map(g => g.id === id ? updatedGame : g);
+  saveMatchingGames(games);
+  res.json({ success: true, game: updatedGame });
+});
+
+app.delete('/api/matching-games/:id', (req, res) => {
+  const { id } = req.params;
+  let games = loadMatchingGames();
+  games = games.filter(g => g.id !== id);
+  saveMatchingGames(games);
+  res.json({ success: true });
+});
+
+// ============ MATCHING GAME GENERATION ============
+
+// ============ GENERATE MATCHING GAME FROM COURSE ============
+
+app.post('/api/generate-course-matching-game', async (req, res) => {
+  try {
+    const { courseTitle, courseDescription, steps } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+
+    // Step 1: Secretly generate comprehensive educational content for better context
+    const contextPrompt = `You are an expert educator. Generate comprehensive educational content for this course that will be used internally to create a high-quality matching game.
+
+Course: "${courseTitle}"
+Description: ${courseDescription}
+Steps:
+${steps.map((s, i) => `${i + 1}. ${s.title}: ${s.description}`).join('\n')}
+
+For each step, write a detailed explanation (150-200 words) covering:
+- Key terms and their definitions
+- Important concepts and relationships
+- Facts, formulas, and figures worth memorizing
+- Examples that illustrate concepts
+
+Return as JSON:
+{
+  "stepContent": [
+    {
+      "stepTitle": "Step title",
+      "content": "Detailed educational content...",
+      "keyTerms": ["term1", "term2"]
+    }
+  ]
+}
+
+Return ONLY valid JSON.`;
+
+    const contextResult = await model.generateContent(contextPrompt);
+    let contextText = contextResult.response.text();
+    contextText = contextText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    let secretContext = '';
+    try {
+      const contextData = JSON.parse(contextText);
+      secretContext = contextData.stepContent?.map(s => `## ${s.stepTitle}\n${s.content}\nKey terms: ${s.keyTerms?.join(', ') || ''}`).join('\n\n') || '';
+    } catch (e) {
+      secretContext = contextText;
+    }
+
+    // Step 2: Generate matching game with enhanced context
+    const systemPrompt = `You are an expert educational game creator. Generate a matching game based on an entire course.
+
+Course: "${courseTitle}"
+Description: ${courseDescription}
+
+DETAILED COURSE CONTENT:
+${secretContext}
+
+Create a matching game that covers key concepts from all course steps.
+
+Return this exact JSON structure:
+
+{
+  "pairs": [
+    {
+      "id": "pair-1",
+      "question": "Question or term",
+      "answer": "Matching answer or definition"
+    }
+  ]
+}
+
+Guidelines:
+1. Create 12-15 pairs (question-answer)
+2. Cover concepts from different steps
+3. Questions and answers should be concise (max 50 characters each)
+4. Use LaTeX for math expressions where appropriate (use $ for inline)
+5. Make questions distinct enough to be identifiable
+6. Focus on the most important concepts from the course
+7. Include a mix of definitions, concepts, formulas, and facts
+
+Return ONLY valid JSON.`;
+
+    const result = await model.generateContent(systemPrompt);
+
+    let responseText = result.response.text();
+    const gameData = await parseJsonWithRetry(responseText, `Matching game for course: ${courseTitle}`);
+    res.json(gameData);
+  } catch (error) {
+    console.error('Error generating course matching game:', error);
+    res.status(500).json({ error: 'Failed to generate matching game', details: error.message });
+  }
+});
+
+app.post('/api/generate-matching-game', upload.array('files'), async (req, res) => {
+  try {
+    const prompt = req.body?.prompt || '';
+    const files = req.files || [];
+
+    let fileContents = '';
+    for (const file of files) {
+      const content = await readFileContent(file.path, file.mimetype);
+      fileContents += `\n\n--- Content from ${file.originalname} ---\n${content}`;
+      fs.unlinkSync(file.path);
+    }
+
+    const systemPrompt = `You are an expert educational game creator. Generate a matching game with 10 pairs (questions and answers).
+
+Return this exact JSON structure:
+
+{
+  "title": "Matching Game title",
+  "description": "Brief description of the matching game",
+  "pairs": [
+    {
+      "id": "pair-1",
+      "question": "Question or term (can include LaTeX like $x^2$ for math)",
+      "answer": "Matching answer or definition"
+    }
+  ]
+}
+
+Guidelines:
+1. Create exactly 10 pairs (question-answer)
+2. Questions and answers should be concise (max 50 characters each if possible)
+3. Cover diverse aspects of the topic
+4. Use LaTeX for math expressions where appropriate
+5. Make questions distinct enough to be identifiable
+6. Answers should be clear and unambiguous
+
+Return ONLY valid JSON.`;
+
+    const userContent = `Create a matching game for: ${prompt || 'the provided materials'}
+${fileContents ? `\nSource materials:${fileContents.substring(0, 5000)}` : ''}`;
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: userContent }
+    ]);
+
+    let responseText = result.response.text();
+    const gameData = await parseJsonWithRetry(responseText, `Matching game for: ${prompt}`);
+    res.json(gameData);
+  } catch (error) {
+    console.error('Error generating matching game:', error);
+    res.status(500).json({ error: 'Failed to generate matching game', details: error.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

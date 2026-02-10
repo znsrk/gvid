@@ -1,5 +1,5 @@
 /**
- * OqyPlus Plugin System - Core Plugin Manager
+ * gvidtech Plugin System - Core Plugin Manager
  * 
  * This implements a WordPress-style hook system with:
  * - FILTERS: Modify data as it flows through the app (like WordPress add_filter/apply_filters)
@@ -244,8 +244,8 @@ class HookRegistry {
 
 // ============ PLUGIN MANAGER ============
 
-const STORAGE_KEY = 'oqyplus_plugins';
-const PLUGIN_CODE_KEY = 'oqyplus_plugin_code';
+const STORAGE_KEY = 'gvidtech_plugins';
+const PLUGIN_CODE_KEY = 'gvidtech_plugin_code';
 
 interface StoredPluginData {
   manifest: PluginManifest;

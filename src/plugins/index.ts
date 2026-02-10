@@ -1,7 +1,7 @@
 /**
- * OqyPlus Plugin System
+ * gvidtech Plugin System
  * 
- * A WordPress-style plugin system for the OqyPlus learning platform.
+ * A WordPress-style plugin system for the gvidtech learning platform.
  * 
  * USAGE:
  * 

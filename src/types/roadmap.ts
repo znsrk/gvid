@@ -16,6 +16,8 @@ export interface LearningMaterial {
   url?: string;
   source?: string;
   youtubeSearch?: string;
+  youtubeVideoId?: string;
+  youtubeTitle?: string;
 }
 
 export interface QuizQuestion {
@@ -83,10 +85,11 @@ export interface Course {
   originalMaterials?: string;
   coverImage?: string;
   flashcards?: Flashcard[];
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
 }
 
 // Generation mode types
-export type GenerationMode = 'course' | 'quiz' | 'flashcards' | 'matching';
+export type GenerationMode = 'course' | 'quiz' | 'flashcards' | 'matching' | 'word-scramble' | 'fill-blank';
 export type QuizMode = 'standard' | 'rapid';
 
 // Standalone quiz (not tied to a course step)
@@ -122,6 +125,47 @@ export interface MatchingGame {
 // Backwards compatibility
 export type RoadmapStep = CourseStep;
 export type Roadmap = Course;
+
+// Word Scramble Game types
+export interface ScrambleWord {
+  id: string;
+  word: string;
+  hint: string;
+  category?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+}
+
+export interface WordScrambleGame {
+  id: string;
+  title: string;
+  description: string;
+  words: ScrambleWord[];
+  createdAt: string;
+  coverImage?: string;
+  bestScore?: number;
+  timesPlayed?: number;
+}
+
+// Fill in the Blank Game types
+export interface FillBlankSentence {
+  id: string;
+  sentence: string; // Contains ___ as the blank
+  answer: string;
+  hint?: string;
+  difficulty?: 'easy' | 'medium' | 'hard';
+}
+
+export interface FillBlankGame {
+  id: string;
+  title: string;
+  description: string;
+  sentences: FillBlankSentence[];
+  createdAt: string;
+  coverImage?: string;
+  bestScore?: number;
+  bestTime?: number;
+  timesPlayed?: number;
+}
 
 export interface GeneratedResponse {
   roadmap: Course;

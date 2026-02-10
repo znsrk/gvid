@@ -1,5 +1,5 @@
 {
-  "name": "oqyplus",
+  "name": "gvidtech",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,6 +20,7 @@
     "express": "^5.2.1",
     "fs": "^0.0.1-security",
     "katex": "^0.16.27",
+    "mammoth": "^1.11.0",
     "mammouth": "^3.0.1",
     "multer": "^2.0.2",
     "pdf-parse": "^2.4.5",

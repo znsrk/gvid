@@ -1,7 +1,7 @@
 /**
- * OqyPlus Plugin System - Hook Definitions
+ * gvidtech Plugin System - Hook Definitions
  * 
- * This file documents ALL available hooks in the OqyPlus system.
+ * This file documents ALL available hooks in the gvidtech system.
  * Plugins can use these hooks to modify behavior without changing core code.
  * 
  * Hook Naming Convention:

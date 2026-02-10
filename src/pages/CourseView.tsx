@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Course, CourseStep, MatchingGame } from '../types/roadmap';
 import LatexText from '../components/LatexText';
+import { apiPost } from '../lib/fetch';
 
 interface CourseViewProps {
   course: Course;
@@ -12,9 +13,6 @@ interface CourseViewProps {
   onGenerateMatchingGame?: (game: MatchingGame) => void;
 }
 
-const API_BASE = 'http://localhost:3001/api';
-
-// Helper to check if a step is unlocked based on previous step's quiz completion
 const isStepUnlocked = (step: CourseStep, steps: CourseStep[]): boolean => {
   // First step is always unlocked
   if (step.stepNumber === 1) return true;
@@ -59,17 +57,13 @@ const CourseView: React.FC<CourseViewProps> = ({
     onLoadingChange(true, 'Creating matching game from course...');
     
     try {
-      const response = await fetch(`${API_BASE}/generate-course-matching-game`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          courseTitle: course.title,
-          courseDescription: course.description,
-          steps: course.steps.map(s => ({
-            title: s.title,
-            description: s.description
-          }))
-        }),
+      const response = await apiPost('/generate-course-matching-game', {
+        courseTitle: course.title,
+        courseDescription: course.description,
+        steps: course.steps.map(s => ({
+          title: s.title,
+          description: s.description
+        }))
       });
 
       if (!response.ok) throw new Error('Failed to generate matching game');
@@ -114,16 +108,12 @@ const CourseView: React.FC<CourseViewProps> = ({
     onLoadingChange(true, 'Loading course content...');
 
     try {
-      const response = await fetch(`${API_BASE}/generate-step-details`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          step,
-          courseTitle: course.title,
-          courseDescription: course.description,
-          originalPrompt: course.originalPrompt,
-          originalMaterials: course.originalMaterials,
-        }),
+      const response = await apiPost('/generate-step-details', {
+        step,
+        courseTitle: course.title,
+        courseDescription: course.description,
+        originalPrompt: course.originalPrompt,
+        originalMaterials: course.originalMaterials,
       });
 
       if (!response.ok) throw new Error('Failed to load content');

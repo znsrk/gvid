@@ -7,22 +7,23 @@
   name: "Custom Color Themes",
   version: "2.1.0",
   description: "Apply beautiful dark color themes with comprehensive styling for all UI elements.",
-  author: "OqyPlus Team",
+  author: "gvidtech Team",
   
   settings: [
     {
       key: "theme",
       type: "select",
       label: "Color Theme",
-      description: "Choose your preferred dark theme",
-      default: "midnight",
+      description: "Choose your preferred color theme",
+      default: "ocean",
       options: [
+        { value: "ocean", label: "Ocean Teal (Default)" },
+        { value: "light", label: "Light / White" },
         { value: "midnight", label: "Midnight Blue" },
         { value: "forest", label: "Forest Green" },
         { value: "sunset", label: "Sunset Orange" },
         { value: "purple", label: "Deep Purple" },
-        { value: "crimson", label: "Crimson Red" },
-        { value: "ocean", label: "Ocean Teal" }
+        { value: "crimson", label: "Crimson Red" }
       ]
     },
     {
@@ -41,6 +42,35 @@
     var sidebarDark = settings ? settings.sidebarDark !== false : true;
     
     var themes = {
+      light: {
+        primary: "#0b4c8a",
+        primaryHover: "#1400a0",
+        primaryLight: "rgba(24, 0, 173, 0.1)",
+        background: "#f5f5f7",
+        contentBg: "#f5f5f7",
+        surface: "#ffffff",
+        surfaceSecondary: "#f7f7f8",
+        surfaceTertiary: "#ececf1",
+        cardBg: "#ffffff",
+        cardBorder: "#e5e5e5",
+        headerBg: "#ffffff",
+        border: "#e5e5e5",
+        borderLight: "#f0f0f0",
+        divider: "#e0e0e0",
+        textPrimary: "#0d0d0d",
+        textSecondary: "#6e6e80",
+        textTertiary: "#8e8ea0",
+        sidebarBg: "#f9f9f9",
+        sidebarText: "#0d0d0d",
+        sidebarIcon: "#6e6e80",
+        sidebarActiveBg: "rgba(24, 0, 173, 0.1)",
+        sidebarActiveText: "#0b4c8a",
+        hoverBg: "#ececf1",
+        shadow: "0 0 15px rgba(0,0,0,0.1)",
+        shadowSm: "0 2px 8px rgba(0,0,0,0.08)",
+        shadowLg: "0 4px 20px rgba(0,0,0,0.12)",
+        shadowXl: "0 8px 32px rgba(0,0,0,0.15)"
+      },
       midnight: { 
         primary: "#3b82f6", 
         primaryHover: "#2563eb",
@@ -272,7 +302,7 @@
     }
     
     // Add data attribute for CSS targeting
-    document.body.setAttribute("data-theme", "dark");
+    document.body.setAttribute("data-theme", theme === "light" ? "light" : "dark");
     document.body.setAttribute("data-theme-variant", theme);
     
     console.log("[Custom Color Themes] Applied " + theme + " theme with full UI coverage");

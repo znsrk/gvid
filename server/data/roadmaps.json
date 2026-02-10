@@ -1,5 +1,1503 @@
 [
   {
+    "title": "Learn French: A Comprehensive Guide",
+    "description": "This course provides a structured approach to learning French, from beginner basics to conversational fluency. You'll learn grammar, vocabulary, pronunciation, and cultural context to confidently communicate in French.",
+    "totalSteps": 9,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Bonjour le Monde: Basic Greetings and Introductions",
+        "description": "Learn essential French greetings, how to introduce yourself and others, and basic polite phrases. By the end of this step, you'll be able to engage in simple introductions and greetings.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch and Listen",
+            "description": "Watch the videos on greetings and introductions carefully, paying attention to pronunciation.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Practice Aloud",
+            "description": "Practice saying the greetings and introductions out loud. Record yourself and compare your pronunciation to the videos.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Introduce Yourself!",
+            "description": "In a mirror, practice introducing yourself using the learned phrases.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: Learn French Greetings for Beginners",
+            "type": "video",
+            "description": "This video will teach you the most common French greetings like 'Bonjour,' 'Bonsoir,' 'Salut,' and 'Au revoir.' It will also cover basic polite phrases.",
+            "youtubeSearch": "learn french greetings beginners",
+            "url": "https://www.youtube.com/results?search_query=learn+french+greetings+beginners"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Video: French Introductions and How to Introduce Others",
+            "type": "video",
+            "description": "Learn how to introduce yourself (name, origin) and introduce others in French. Includes phrases like 'Je m'appelle,' 'Voici,' and 'Enchanté(e)'.",
+            "youtubeSearch": "french introductions and how to introduce others",
+            "url": "https://www.youtube.com/results?search_query=french+introductions+and+how+to+introduce+others"
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- Bonjour: Hello/Good morning/Good day\n- Bonsoir: Good evening/Good night\n- Salut: Hi (informal)\n- Au revoir: Goodbye\n- Je m'appelle...: My name is...\n- Comment vous appelez-vous?: What's your name? (formal)\n- Comment tu t'appelles?: What's your name? (informal)\n- Enchanté(e): Pleased to meet you\n- Voici: This is (introducing someone)"
+          },
+          {
+            "id": "mat-1-4",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Imagine you are at a party in France. Write a short dialogue (3-4 lines) where you introduce yourself to someone and then introduce that person to another guest. Use at least three of the phrases you learned in the videos."
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Les Nombres et l'Alphabet: Numbers, Alphabet, and Pronunciation",
+        "description": "Master the French alphabet, pronunciation rules, and numbers. This step focuses on building a solid foundation for reading and speaking French correctly. You will be able to spell words and count in French.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Être et Avoir: The Verbs 'To Be' and 'To Have'",
+        "description": "Learn the conjugation and usage of the fundamental verbs 'être' (to be) and 'avoir' (to have) in the present tense. This step is crucial for forming basic sentences in French. You will practice forming simple sentences with these verbs.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Les Articles et les Noms: Articles and Nouns",
+        "description": "Understand definite and indefinite articles and their agreement with nouns. Learn about masculine and feminine nouns and how to identify them. You will be able to correctly use articles with nouns.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Décrire: Describing People and Things",
+        "description": "Expand your vocabulary with adjectives for describing people, places, and things. Learn adjective agreement and placement in French sentences. You will be able to describe yourself and others using adjectives.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "La Famille et les Amis: Family and Friends Vocabulary",
+        "description": "Learn vocabulary related to family members and friends. Practice using these terms in sentences and conversations. This step will enable you to talk about your family and friends in French.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Le Présent: Present Tense Conjugation (Regular Verbs)",
+        "description": "Learn the present tense conjugation of regular -er, -ir, and -re verbs. Practice conjugating these verbs and using them in sentences. You will master the most common verb conjugations in French.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Poser des Questions: Asking Questions in French",
+        "description": "Learn how to form different types of questions in French, including using question words (qui, quoi, où, quand, comment, pourquoi) and intonation. You'll be able to ask a variety of questions.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-9",
+        "stepNumber": 9,
+        "title": "La Nourriture et les Boissons: Food and Drinks Vocabulary",
+        "description": "Learn vocabulary for common foods and drinks. Practice ordering food and drinks in a restaurant or café setting. You'll be able to confidently navigate French menus and order meals.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1770658068843",
+    "createdAt": "2026-02-09T17:27:48.843Z",
+    "progress": 0,
+    "originalPrompt": "teach me french",
+    "originalMaterials": "",
+    "coverImage": "https://images.unsplash.com/photo-1735997611677-4f7afbb943bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzA2NTgxMTl8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Understanding Social Structure",
+    "description": "This course provides a comprehensive overview of social structure, examining its components, types, functions, and impact on individuals and society. It delves into the concepts of status, roles, groups, organizations, and institutions, exploring their interrelationships and their contributions to social order and change.",
+    "totalSteps": 7,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Social Structure: Defining the Framework",
+        "description": "This step introduces the fundamental concept of social structure. You will learn to define social structure, differentiate it from other social concepts, and understand its importance in shaping human behavior and social interactions. The learning objective is to be able to explain the key components of social structure and its influence on society.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: What is Social Structure?",
+            "description": "Watch the recommended videos and take notes on the different definitions of social structure presented.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Identify: Social Structures in Your Life",
+            "description": "List three social structures you are a part of (e.g., family, workplace, school).",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Define: In Your Own Words",
+            "description": "Write a short paragraph defining social structure in your own words, incorporating the key components you learned about.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: Understanding Social Structure - Definition and Components",
+            "type": "video",
+            "description": "This video should explain the basic definition of social structure and introduce its key components such as status, roles, norms, and institutions.",
+            "youtubeSearch": "What is Social Structure? Sociology",
+            "url": "https://www.youtube.com/results?search_query=What+is+Social+Structure%3F+Sociology"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Video: Social Structure and its Influence on Behavior",
+            "type": "video",
+            "description": "This video should demonstrate how social structure shapes and influences individual behavior and social interactions.",
+            "youtubeSearch": "Social Structure and Behavior",
+            "url": "https://www.youtube.com/results?search_query=Social+Structure+and+Behavior"
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- **Social Structure:** The organized pattern of social relationships and social institutions that together compose society.\n- **Components:** Status, roles, groups, organizations, institutions.\n- **Importance:** Provides social order, predictability, and shapes individual behavior.\n- **Influence:** Dictates acceptable behavior within a society.\n- **Social Institutions:** Established sets of norms and subsystems that support society’s survival (e.g., family, education, government).\n"
+          },
+          {
+            "id": "mat-1-4",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Think about the social structure of your workplace or school. Identify one role within that structure. Describe the expected behaviors (norms) associated with that role. How does this role contribute to the overall function of the workplace or school?"
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true,
+        "materialProgress": 3,
+        "test": {
+          "id": "test-step-1",
+          "questions": [
+            {
+              "id": "q1",
+              "question": "Which of the following BEST defines 'social structure'?",
+              "options": [
+                "The random and unpredictable interactions between individuals in a society.",
+                "The organized pattern of social relationships and social institutions that together compose society.",
+                "The personal beliefs and values held by individuals within a community.",
+                "The physical buildings and infrastructure present in a city or region."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social structure refers to the established and relatively stable patterns of social relationships and institutions that form the foundation of a society. It's about organization, not randomness."
+            },
+            {
+              "id": "q2",
+              "question": "Which of the following is NOT considered a core component of social structure, as discussed in the materials?",
+              "options": [
+                "Statuses",
+                "Roles",
+                "Organizations",
+                "Individual personalities"
+              ],
+              "correctAnswer": 3,
+              "explanation": "While individual personalities certainly influence social interactions, they are not considered a *component* of the overall social structure. Statuses, roles, organizations, and institutions are the key building blocks."
+            },
+            {
+              "id": "q3",
+              "question": "A student is expected to attend classes, complete assignments, and respect their teachers. This set of expected behaviors is an example of a:",
+              "options": [
+                "Status",
+                "Role",
+                "Social institution",
+                "Social norm"
+              ],
+              "correctAnswer": 1,
+              "explanation": "A role is a set of expected behaviors associated with a particular status. In this case, the status is 'student' and the described actions are the expected behaviors, or role, of a student."
+            },
+            {
+              "id": "q4",
+              "question": "How does social structure primarily influence individual behavior?",
+              "options": [
+                "By completely determining all aspects of an individual's actions.",
+                "By providing guidelines and expectations for behavior in different social contexts.",
+                "By having no impact on individual behavior; people act solely according to their own free will.",
+                "By promoting constant social change and instability."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social structure provides a framework that shapes behavior by establishing norms, expectations, and guidelines. While individuals have agency, their choices are heavily influenced by the social context they operate within."
+            },
+            {
+              "id": "q5",
+              "question": "Which of the following is an example of a social institution?",
+              "options": [
+                "A group of friends playing basketball.",
+                "The family as a unit for raising children.",
+                "Two strangers having a brief conversation on the street.",
+                "A spontaneous protest against a local policy."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social institutions are established sets of norms and subsystems that support society’s survival. The family, as a fundamental unit for socialization and reproduction, is a prime example of a social institution."
+            },
+            {
+              "id": "q6",
+              "question": "Why is understanding social structure important?",
+              "options": [
+                "It allows us to predict individual behavior with absolute certainty.",
+                "It helps us understand social order, predictability, and the factors that shape human behavior.",
+                "It eliminates the need for individual decision-making.",
+                "It guarantees complete social equality and justice."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Understanding social structure is crucial for comprehending how societies function. It reveals the underlying patterns that create social order, make behavior more predictable, and influence individual actions (though not absolutely determine them)."
+            },
+            {
+              "id": "q7",
+              "question": "Consider a hospital. Which of the following represents a STATUS within the hospital's social structure?",
+              "options": [
+                "Administering medication to patients.",
+                "Doctor",
+                "Following hospital protocol.",
+                "The overall goal of providing healthcare."
+              ],
+              "correctAnswer": 1,
+              "explanation": "A status is a recognized social position that an individual occupies. 'Doctor' is a status, whereas the other options describe roles or functions."
+            },
+            {
+              "id": "q8",
+              "question": "Which of the following scenarios BEST demonstrates the influence of social structure on individual behavior?",
+              "options": [
+                "An individual decides to pursue a career in art because they enjoy painting.",
+                "A person waits in line at the grocery store instead of cutting to the front.",
+                "Someone chooses to wear a bright pink outfit to a funeral.",
+                "An individual decides to donate to a charity of their choice."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Waiting in line reflects adherence to a social norm embedded within a larger social structure. The norm dictates orderly behavior, showcasing the influence of social structure on individual behavior."
+            },
+            {
+              "id": "q9",
+              "question": "How does the concept of 'social structure' relate to the functioning of a university?",
+              "options": [
+                "Social structure is irrelevant to universities, as they are centers of individual learning.",
+                "Social structure provides the framework of roles, statuses, and institutions (like departments and student organizations) that organize the university's operations.",
+                "Social structure only applies to the administrative aspects of the university, not to the students or faculty.",
+                "Social structure is a temporary phenomenon that changes every academic year."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social structure provides the organizing framework for a university. It defines the roles (professors, students, administrators), statuses (department heads, teaching assistants), and institutions (departments, libraries) that contribute to its functioning."
+            },
+            {
+              "id": "q10",
+              "question": "Which of the following actions would be MOST likely to challenge or disrupt an existing social structure?",
+              "options": [
+                "An individual consistently performs their assigned role within an organization.",
+                "A group of people actively protest against discriminatory laws.",
+                "A company introduces a new and innovative product to the market.",
+                "A family decides to move to a different city."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Actively protesting against discriminatory laws directly challenges the established norms and power dynamics within the social structure, potentially leading to significant social change."
+            },
+            {
+              "id": "q11",
+              "question": "A fast-food restaurant is an example of an organization. How does the concept of social structure apply within this organization?",
+              "options": [
+                "Social structure is irrelevant in a profit-driven environment like a fast-food restaurant.",
+                "The restaurant's social structure defines roles (manager, cashier, cook), statuses, and expected interactions that contribute to its operational efficiency.",
+                "Social structure only applies to the customers visiting the restaurant.",
+                "The restaurant's success depends entirely on the individual personalities of its employees, not on any structured system."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Even in a seemingly simple organization like a fast-food restaurant, social structure defines the hierarchy, roles, and expected behaviors that ensure smooth operation. Each role contributes to the overall function through structured interactions."
+            },
+            {
+              "id": "q12",
+              "question": "Why are social institutions considered vital for the survival of a society?",
+              "options": [
+                "Because they guarantee perfect equality and happiness for all members of society.",
+                "Because they provide the framework for satisfying basic social needs, maintaining order, and transmitting culture.",
+                "Because they prevent any form of social change or innovation.",
+                "Because they are solely responsible for economic prosperity."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social institutions are essential because they address fundamental societal needs, ensuring stability, continuity, and the transmission of values and norms across generations. They help maintain order and provide a framework for social life."
+            }
+          ],
+          "completed": false,
+          "totalQuestions": 12
+        }
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Status: Ascribed and Achieved Positions",
+        "description": "This step explores the concept of status within social structure. You will learn to distinguish between ascribed and achieved statuses, analyze their impact on individual opportunities and social hierarchies, and understand the concept of master status. The learning objective is to identify and differentiate between various types of statuses and their effects.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Roles: Expected Behaviors and Social Norms",
+        "description": "This step focuses on roles, which are the behavioral expectations associated with statuses. You will explore the concepts of role performance, role conflict, and role strain, and analyze how roles contribute to social order and predictability. The learning objective is to analyze how roles shape social interaction and contribute to the stability and functioning of society.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Groups: Building Blocks of Social Structure",
+        "description": "This step examines the significance of groups in social structure. You will learn to distinguish between different types of groups (primary, secondary, in-groups, out-groups), analyze their functions, and understand their impact on individual identity and social cohesion. The learning objective is to categorize and analyze different types of groups and their impact on social life.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Organizations: Formal Structures and Bureaucracy",
+        "description": "This step explores the concept of organizations as formal structures within society. You will learn about different types of organizations, analyze their characteristics (particularly bureaucracy), and understand their role in achieving collective goals. The learning objective is to describe the features of formal organizations and their functions within social structure.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Institutions: The Framework of Social Life",
+        "description": "This step delves into the concept of social institutions. You will learn to identify the major social institutions (family, education, religion, economy, government), analyze their functions, and understand their impact on individual lives and social order. The learning objective is to identify and analyze the major social institutions and their functions in maintaining social order.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Social Structure and Social Change: Dynamics and Transformations",
+        "description": "This step examines the relationship between social structure and social change. You will analyze how social structure can both facilitate and resist change, and understand the factors that contribute to transformations in social organization. The learning objective is to evaluate how social structure influences and is influenced by social change processes.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769355416075",
+    "createdAt": "2026-01-25T15:36:56.075Z",
+    "progress": 0,
+    "originalPrompt": "",
+    "originalMaterials": "\n\n--- Content from Social_Structure_Brinkerhoff,_White,_Ortega,_Weitz_Essentials_of (1).pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1706281964784-2b8ba7b417cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNTU0NTF8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Calculus Fundamentals",
+    "description": "A comprehensive introduction to the core concepts and techniques of differential and integral calculus, designed for beginners.",
+    "totalSteps": 8,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Limits: The Foundation of Calculus",
+        "description": "Learn about the concept of limits, how to calculate them algebraically and graphically, and understand their role as the basis for calculus. You will learn to evaluate limits using direct substitution and understand indeterminate forms.",
+        "estimatedTime": "1 hour",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: Introduction to Limits",
+            "description": "Watch the video explaining the fundamental idea of a limit.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Practice: Evaluating Limits Algebraically",
+            "description": "Work through the provided practice exercise, focusing on direct substitution and identifying indeterminate forms.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Review: Key Concepts",
+            "description": "Review the summary of key concepts related to limits to solidify your understanding.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: What is a Limit?",
+            "type": "video",
+            "description": "This video explains the concept of a limit and how to estimate it from a graph.",
+            "youtubeSearch": "calculus limits explained",
+            "url": "https://www.youtube.com/results?search_query=calculus+limits+explained"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- A limit describes the value a function approaches as the input approaches some value.\n- Notation: $\\lim_{x \\to a} f(x) = L$ means as $x$ gets close to $a$, $f(x)$ gets close to $L$.\n- Direct Substitution: If $f(x)$ is continuous at $x=a$, then $\\lim_{x \\to a} f(x) = f(a)$.\n- Indeterminate Form:  The expression 0/0 is an indeterminate form, requiring further simplification."
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Evaluate the following limits using direct substitution:\n\n1. $\\lim_{x \\to 2} (x^2 + 3x - 1)$\n2. $\\lim_{x \\to -1} \\frac{x+5}{x-2}$\n\nWhat happens when you try direct substitution for $\\lim_{x \\to 1} \\frac{x^2 - 1}{x - 1}$? (Identify the indeterminate form)"
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Continuity and Its Implications",
+        "description": "Explore the concept of continuity of functions, including types of discontinuities, the Intermediate Value Theorem, and its applications. Understand the relationship between limits and continuity.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Introduction to Derivatives: The Concept of Rate of Change",
+        "description": "Learn the definition of the derivative, understand its geometric interpretation as the slope of a tangent line, and practice finding derivatives using the limit definition. Introduce basic differentiation rules.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Differentiation Rules: Power, Product, Quotient, and Chain Rule",
+        "description": "Master essential differentiation rules including the power rule, product rule, quotient rule, and chain rule. Learn how to apply these rules to find derivatives of various functions.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Applications of Derivatives: Optimization and Related Rates",
+        "description": "Apply derivatives to solve optimization problems (finding maxima and minima) and related rates problems. Learn how to set up and solve these types of application problems.",
+        "estimatedTime": "1 hour 30 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Introduction to Integrals: The Concept of Accumulation",
+        "description": "Learn the concept of the definite and indefinite integral, understand the Fundamental Theorem of Calculus, and learn basic integration techniques. Introduce the concept of antiderivatives.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Integration Techniques: Substitution and Basic Applications",
+        "description": "Master the u-substitution technique for integration and apply integrals to calculate areas under curves and average values of functions.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Review and Problem Solving: Calculus Fundamentals",
+        "description": "Review all the concepts covered in the course, and practice solving a variety of calculus problems to solidify your understanding. This step will focus on applying all learned techniques to complex problems.",
+        "estimatedTime": "1 hour 30 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769348834514",
+    "createdAt": "2026-01-25T13:47:14.514Z",
+    "progress": 0,
+    "originalPrompt": "I want to learn calculus",
+    "originalMaterials": "",
+    "coverImage": "https://images.unsplash.com/photo-1758685733835-c90530b20bdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNDg4Njh8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Understanding Social Structure",
+    "description": "This course provides a comprehensive overview of social structure, its components, how it influences individual behavior, and the ways it changes over time. It covers key concepts like status, roles, groups, institutions, and culture, and explores different theoretical perspectives on social structure.",
+    "totalSteps": 8,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Social Structure: Defining the Basics",
+        "description": "This step introduces the fundamental concepts of social structure, including its definition, key elements, and significance in shaping human behavior. You will learn how social structure provides a framework for social interaction and influences our lives.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: What is Social Structure?",
+            "description": "Watch the recommended video and take notes on the key components of social structure.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Define: Social Structure in your own words.",
+            "description": "After watching the video and reviewing the summary, write a short paragraph (3-5 sentences) defining social structure using your own understanding.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Reflect: Social Structure in your life",
+            "description": "Think about a social institution (e.g., education, healthcare) and briefly describe how it influences your life.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: Understanding Social Structure - Introduction to Sociology",
+            "type": "video",
+            "description": "This video provides a clear explanation of social structure, its elements (status, roles, groups, institutions), and its importance in sociology. It also likely covers the difference between micro and macro level social structures.",
+            "youtubeSearch": "Understanding Social Structure Sociology",
+            "url": "https://www.youtube.com/results?search_query=Understanding+Social+Structure+Sociology"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "Social Structure: The organized pattern of social relationships and institutions that compose society.\n\nKey Elements:\n*   Status: A position a person occupies in society.\n*   Role: The behavior expected of someone holding a particular status.\n*   Groups: Two or more people who interact and identify with one another.\n*   Institutions: Established sets of norms and subsystems that support societies' survival (e.g., family, education).\n\nSocial structure influences individual behavior by providing norms, expectations, and opportunities."
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Identify three different social roles you currently occupy (e.g., student, employee, family member). For each role, list two or three expected behaviors associated with that role. How do these expected behaviors shape your actions and interactions with others?"
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true,
+        "materialProgress": 2
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Statuses and Roles: Building Blocks of Social Interaction",
+        "description": "This step explores the concepts of statuses and roles as essential components of social structure. You will differentiate between ascribed and achieved statuses, understand role expectations and performance, and analyze how status sets and role strain impact individuals.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Groups and Social Networks: Patterns of Interaction",
+        "description": "This step examines different types of groups, including primary and secondary groups, in-groups and out-groups, and reference groups. You will also learn about the concept of social networks and how they contribute to social cohesion and influence.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Social Institutions: Organized Patterns of Social Behavior",
+        "description": "This step focuses on the concept of social institutions, such as family, education, religion, government, and the economy. You will learn about the functions of these institutions and their impact on social stability and change.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Culture and Social Structure: Shared Values and Norms",
+        "description": "This step explores the relationship between culture and social structure. You will learn how shared values, beliefs, norms, and symbols shape social interaction and contribute to the maintenance of social order.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Theoretical Perspectives on Social Structure: Functionalism, Conflict Theory, and Symbolic Interactionism",
+        "description": "This step introduces different theoretical perspectives on social structure, including functionalism, conflict theory, and symbolic interactionism. You will learn how each perspective explains the organization of society and the relationships between its parts.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Social Stratification and Inequality: Examining Hierarchies",
+        "description": "This step analyzes social stratification and inequality within social structures. You will learn about different systems of stratification, such as class, caste, and estate systems, and how they contribute to social inequality.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Social Change and Restructuring: Adapting to New Realities",
+        "description": "This step explores the dynamics of social change and how social structures adapt to new realities. You will learn about the factors that drive social change, such as technological innovation, demographic shifts, and social movements, and their impact on social institutions and patterns of interaction.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769344534054",
+    "createdAt": "2026-01-25T12:35:34.054Z",
+    "progress": 0,
+    "originalPrompt": "",
+    "originalMaterials": "\n\n--- Content from Social_Structure_Brinkerhoff,_White,_Ortega,_Weitz_Essentials_of (1).pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1630592263024-9dd25db80820?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNDQ1Njh8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Understanding Social Structure: A Sociological Perspective",
+    "description": "This course provides a comprehensive introduction to social structure, exploring its key components, theoretical perspectives, and impact on individual behavior and society. You will learn about culture, social institutions, groups, and social stratification, and how they shape our lives.",
+    "totalSteps": 9,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Social Structure: Defining the Basics",
+        "description": "This step introduces the fundamental concepts of social structure, including its definition and importance in sociology. You will learn about the building blocks of social structure and understand how it differs from social interaction. Learning objective: Define social structure and explain its relevance to sociological analysis.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: Social Structure Defined",
+            "description": "Watch the first video resource on social structure and take notes on the key components and definition.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Reflect: Structure vs. Interaction",
+            "description": "Think about how social structure influences everyday social interactions. Give a specific example of how a social structure you are familiar with (e.g., education system, family structure) impacts your interactions.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Define: Social Structure in Your Own Words",
+            "description": "Write a one-sentence definition of social structure based on what you've learned.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: Defining Social Structure - Sociology",
+            "type": "video",
+            "description": "This video explains the basic definition of social structure, its components (norms, roles, institutions), and its importance in understanding social behavior.",
+            "youtubeSearch": "social structure definition sociology",
+            "url": "https://www.youtube.com/results?search_query=social+structure+definition+sociology"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- Social structure: Enduring patterns of social relationships, institutions, and norms that shape behavior.\n- Components: Norms (rules), roles (expectations), institutions (organized systems).\n- Social interaction: Micro-level encounters between individuals.\n- Social structure provides the framework for social interaction.\n- Sociology studies how social structure influences individual and group behavior.  Social structure is a macro level concept, while social interaction is micro."
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Identify three different social structures that exist in your university (e.g., academic departments, student government, sports teams). For each, list two specific norms associated with that structure."
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true,
+        "materialProgress": 2,
+        "test": {
+          "id": "test-step-1",
+          "questions": [
+            {
+              "id": "q1",
+              "question": "Which of the following BEST defines 'social structure' in sociology?",
+              "options": [
+                "The random and unpredictable interactions between individuals in a society.",
+                "Enduring patterns of social relationships, institutions, and norms that shape behavior.",
+                "The subjective feelings and thoughts individuals have about their society.",
+                "The ever-changing trends and fads that influence popular culture."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Social structure refers to the established and relatively stable patterns of social behavior that organize and shape how individuals and groups interact within a society.  It encompasses institutions, norms, and relationships."
+            },
+            {
+              "id": "q2",
+              "question": "Which of the following is NOT considered a core component of social structure?",
+              "options": [
+                "Norms",
+                "Roles",
+                "Institutions",
+                "Individual Emotions"
+              ],
+              "correctAnswer": 3,
+              "explanation": "While individual emotions can be influenced by social structure, they are not a core component of it. Norms (rules), roles (expectations), and institutions (organized systems) are the key building blocks."
+            },
+            {
+              "id": "q3",
+              "question": "What is the primary difference between 'social structure' and 'social interaction'?",
+              "options": [
+                "Social structure refers to large-scale patterns, while social interaction refers to small-scale encounters.",
+                "Social structure is constantly changing, while social interaction remains stable.",
+                "Social interaction determines social structure, but social structure has no impact on social interaction.",
+                "Social structure is studied by psychologists, while social interaction is studied by sociologists."
+              ],
+              "correctAnswer": 0,
+              "explanation": "Social structure is a macro-level concept referring to enduring patterns, while social interaction is a micro-level concept referring to face-to-face encounters. Social structure provides the framework within which social interactions occur."
+            },
+            {
+              "id": "q4",
+              "question": "Which of the following statements BEST describes the relationship between social structure and social interaction?",
+              "options": [
+                "Social structure is irrelevant to social interaction.",
+                "Social interaction creates social structure, but social structure does not influence social interaction.",
+                "Social structure provides the framework within which social interaction occurs.",
+                "Social interaction is a completely separate phenomenon from social structure."
+              ],
+              "correctAnswer": 2,
+              "explanation": "Social structure provides the overarching framework of norms, roles, and institutions that shape and constrain social interaction. It sets the stage for how individuals behave and interact."
+            },
+            {
+              "id": "q5",
+              "question": "In the context of a university, which of the following BEST exemplifies a 'social institution'?",
+              "options": [
+                "A group of friends studying together in the library.",
+                "The university's academic departments (e.g., Sociology, Biology).",
+                "A casual conversation between two students in the cafeteria.",
+                "A single student's personal goals and aspirations."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Academic departments are examples of organized systems, with established rules, roles (professors, students, administrators), and procedures.  They fulfill a societal need (education) and are therefore considered institutions."
+            },
+            {
+              "id": "q6",
+              "question": "Which of the following is an example of a norm associated with the social structure of a sports team?",
+              "options": [
+                "Each player wearing their favorite color socks.",
+                "Arriving on time for practice and following the coach's instructions.",
+                "Individual players deciding their own game strategies.",
+                "Players ignoring team rules and doing whatever they want."
+              ],
+              "correctAnswer": 1,
+              "explanation": "Norms are the rules or expectations of behavior. Arriving on time and following instructions are established expectations within a sports team structure."
+            },
+            {
+              "id": "q7",
+              "question": "Sociologists study social structure primarily to understand:",
+              "options": [
+                "The psychological motivations of individuals.",
+                "How social institutions evolved historically.",
+                "How social structure influences individual and group behavior.",
+                "The economic systems of different countries."
+              ],
+              "correctAnswer": 2,
+              "explanation": "Sociology examines how larger social structures (like institutions, norms, and patterns of relationships) affect people's actions, opportunities, and overall experiences."
+            },
+            {
+              "id": "q8",
+              "question": "Which of the following research questions would a sociologist studying social structure be MOST likely to ask?",
+              "options": [
+                "What are the psychological effects of poverty on an individual's self-esteem?",
+                "How does the legal system contribute to social inequality?",
+                "How do individual neurons fire in the brain during social interactions?",
+                "What are the chemical compounds found in different types of rocks?"
+              ],
+              "correctAnswer": 1,
+              "explanation": "The legal system is a social institution. A question about how it contributes to social inequality addresses the influence of a social structure on a social outcome (inequality). The other questions fall outside the realm of social structure and sociology in general."
+            },
+            {
+              "id": "q9",
+              "question": "Imagine a new rule is implemented in a university that all classes must now be taught outdoors, regardless of weather. This could lead to disruption and challenges to which aspect of the university's social structure?",
+              "options": [
+                "The established norms and practices associated with education.",
+                "The physical layout of the campus.",
+                "The individual preferences of students.",
+                "The university's financial resources."
+              ],
+              "correctAnswer": 0,
+              "explanation": "Changing the location of classes and requiring them to be taught outdoors significantly challenges the existing norms and practices within the educational institution, particularly those concerning classroom settings and learning environments."
+            },
+            {
+              "id": "q10",
+              "question": "Consider a hospital. Identify the institutional component of the social structure.",
+              "options": [
+                "The individual doctors and nurses.",
+                "The building itself.",
+                "The organized system of healthcare delivery, with established roles and procedures.",
+                "The patients and their individual medical conditions."
+              ],
+              "correctAnswer": 2,
+              "explanation": "The institution is the organized system itself - how healthcare is delivered through established roles (doctors, nurses), norms (patient confidentiality), and procedures (admissions, treatment). The individual actors and the building are part of, but not the entire, institutional structure."
+            }
+          ],
+          "completed": false,
+          "totalQuestions": 10
+        }
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Culture as a Component of Social Structure: Values, Norms, and Beliefs",
+        "description": "This step focuses on culture as a vital element of social structure. You'll explore the components of culture, including values, norms, beliefs, and symbols, and analyze their role in shaping social behavior. Learning Objective: Analyze the components of culture and their influence on social interaction and social structure.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Social Institutions: Understanding Their Functions and Types",
+        "description": "This step explores social institutions, examining their functions in society and different types of institutions (e.g., family, education, religion, economy, government). Learning objective: Identify and analyze the functions of major social institutions and their impact on social structure.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Groups and Social Interaction: Primary, Secondary, and Reference Groups",
+        "description": "This step examines the role of groups in social structure, distinguishing between primary, secondary, and reference groups. You'll analyze how group dynamics influence individual behavior and social processes. Learning Objective: Differentiate between different types of social groups and explain their impact on individuals and society.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Social Stratification: Class, Status, and Power",
+        "description": "This step introduces the concept of social stratification and its dimensions (class, status, and power). You'll explore different systems of stratification and their consequences for social inequality. Learning Objective: Define social stratification and analyze its various dimensions, including class, status, and power.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Theoretical Perspectives on Social Structure: Functionalism, Conflict Theory, and Symbolic Interactionism",
+        "description": "This step explores different sociological perspectives on social structure, including functionalism, conflict theory, and symbolic interactionism. You'll learn how each perspective explains the nature and function of social structure. Learning Objective: Compare and contrast different theoretical perspectives on social structure.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Social Structure and Social Change: Dynamics and Transformations",
+        "description": "This step examines the relationship between social structure and social change. You'll explore how social structures can change over time and the factors that contribute to these changes. Learning Objective: Analyze the dynamics of social change and its relationship to social structure.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Social Structure and Individual Agency: Navigating Constraints and Opportunities",
+        "description": "This step explores the interplay between social structure and individual agency. You'll examine how social structures constrain individual behavior but also provide opportunities for action. Learning objective: Explain the relationship between social structure and individual agency.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-9",
+        "stepNumber": 9,
+        "title": "Applying Social Structure: Analyzing Contemporary Social Issues",
+        "description": "This step applies the concepts of social structure to analyze contemporary social issues, such as inequality, crime, and globalization. Learning objective: Apply the concepts learned in this course to analyze real-world social problems from a sociological perspective.",
+        "estimatedTime": "1 hour 30 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769340975986",
+    "createdAt": "2026-01-25T11:36:15.986Z",
+    "progress": 0,
+    "originalPrompt": "",
+    "originalMaterials": "\n\n--- Content from Social_Structure_Brinkerhoff,_White,_Ortega,_Weitz_Essentials_of (1).pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1766549713906-afa23e5a3265?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNDEwMTB8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Understanding Social Structure: A Sociological Perspective",
+    "description": "This course provides a comprehensive introduction to the concept of social structure, exploring its components, functions, and impact on individual and collective behavior. You will learn about the various elements that constitute social structure, including culture, social class, groups, and institutions, and how these elements interact to shape social life.",
+    "totalSteps": 8,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Social Structure: Definition and Importance",
+        "description": "This step introduces the fundamental concept of social structure, defining it and highlighting its importance in understanding social behavior. By the end of this step, you will be able to define social structure, explain why it is central to sociological analysis, and identify its basic components.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: Defining Social Structure",
+            "description": "Watch the first video and take notes on the core elements of social structure as defined by the sociologist in the video.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Reflect: Social Structure in Daily Life",
+            "description": "Think of one example of social structure influencing your daily interactions. Write a short paragraph describing it.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Review: Key Concepts",
+            "description": "Read the 'Key Concepts Summary' below and identify any concepts that are unclear to you. Seek additional clarification online or from your instructor.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: What is Social Structure?",
+            "type": "video",
+            "description": "This video should explain the fundamental definition of social structure, its components (norms, institutions, hierarchies), and why it's important for understanding human behavior.",
+            "youtubeSearch": "What is Social Structure Sociology",
+            "url": "https://www.youtube.com/results?search_query=What+is+Social+Structure+Sociology"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- **Social Structure:** The organized pattern of social relationships and social institutions that together compose society.\n- **Components:** Includes norms, values, roles, statuses, groups, and institutions.\n- **Importance:** Provides predictability and stability in social interactions; shapes individual opportunities and constraints.\n- **Levels of Analysis:** Can be examined at the macro (societal) and micro (individual interaction) levels.\n- **Social Hierarchy**: ranking system that determines access to resources."
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Identify three institutions (e.g., family, education, government) and list at least one norm associated with each. How do these norms shape individual behavior within those institutions?"
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true,
+        "materialProgress": 2
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Culture as a Component of Social Structure: Values, Norms, and Beliefs",
+        "description": "This step delves into the role of culture as a crucial component of social structure. You will explore the different elements of culture – values, norms, beliefs – and how they influence social interactions and societal patterns. Upon completion, you will be able to explain how culture shapes social structure and provide examples of cultural values, norms, and beliefs in different societies.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Social Class and Stratification: Hierarchy and Inequality",
+        "description": "This step examines social class and stratification as key dimensions of social structure. You will learn about different stratification systems, the concept of social mobility, and the consequences of social inequality. By the end of this step, you will be able to differentiate between various types of social stratification, explain the factors contributing to social inequality, and analyze the impact of social class on life chances.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Groups and Organizations: Building Blocks of Society",
+        "description": "This step explores the role of groups and organizations in shaping social structure. You will learn about different types of groups (primary, secondary, in-groups, out-groups) and the characteristics of formal organizations. By the end of this step, you will be able to distinguish between different types of groups, analyze the functions of formal organizations, and understand how groups and organizations contribute to social order.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Social Institutions: The Framework of Social Life",
+        "description": "This step focuses on social institutions, examining their functions and their role in maintaining social order. You will learn about major social institutions such as family, education, religion, and the economy. Upon completion, you will be able to define social institutions, explain their key functions, and analyze how they contribute to social stability and change.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Social Roles and Statuses: Individual Positions within the Structure",
+        "description": "This step explores the concepts of social roles and statuses and how they fit within the larger social structure. You will learn about ascribed and achieved statuses, role conflict, and role strain. By the end of this step, you will be able to define social roles and statuses, differentiate between ascribed and achieved statuses, and explain the challenges associated with role conflict and role strain.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Social Change and Social Structure: Dynamics and Transformations",
+        "description": "This step examines the relationship between social change and social structure. You will learn about different sources of social change and how these changes impact social institutions and patterns of social interaction. Upon completion, you will be able to identify the major sources of social change, analyze how social change affects social structure, and understand the consequences of social change for individuals and society.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Applying Social Structure: Analyzing Contemporary Social Issues",
+        "description": "This step focuses on applying the concepts of social structure to analyze contemporary social issues. You will learn how to use a structural perspective to understand problems such as poverty, inequality, and crime. By the end of this step, you will be able to apply the concepts of social structure to analyze real-world social problems and understand the structural factors contributing to these problems.",
+        "estimatedTime": "1 hour 30 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769340528805",
+    "createdAt": "2026-01-25T11:28:48.805Z",
+    "progress": 0,
+    "originalPrompt": "",
+    "originalMaterials": "\n\n--- Content from Social_Structure_Brinkerhoff,_White,_Ortega,_Weitz_Essentials_of (1).pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1766156180994-edac55dbf291?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNDA1NjN8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Exploring Sociological Theory: A Comprehensive Overview",
+    "description": "This course provides a structured exploration of major sociological theories, thinkers, and perspectives, enabling learners to understand the foundations of sociological thought and apply theoretical frameworks to analyze social phenomena.",
+    "totalSteps": 8,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Introduction to Sociological Theory: Foundations and Perspectives",
+        "description": "This step introduces the core concepts of sociological theory, its historical development, and its importance in understanding social phenomena. You will learn about the key perspectives within sociology.",
+        "estimatedTime": "1 hour",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Watch: Introduction to Sociological Theory",
+            "description": "Watch the videos provided and take notes on the key figures and perspectives discussed.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Review: Key Concepts",
+            "description": "Review the 'Key Concepts Summary' and ensure you understand each term.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Complete: Perspectives Analysis",
+            "description": "Complete the 'Practice Exercise' to apply sociological perspectives to a real-world scenario.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Video: Introduction to Sociological Theory",
+            "type": "video",
+            "description": "This video introduces the basic concepts of sociological theory, including its historical context and major theoretical perspectives (e.g., functionalism, conflict theory, symbolic interactionism).",
+            "youtubeSearch": "Introduction to Sociological Theory crash course",
+            "url": "https://www.youtube.com/results?search_query=Introduction+to+Sociological+Theory+crash+course"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "- **Sociological Theory:** A set of ideas that provides explanations for human society.\n- **Functionalism:** Emphasizes social order and stability. Society is like an organism, each part with a function.\n- **Conflict Theory:** Focuses on power, inequality, and social change. Society is characterized by competition for resources.\n- **Symbolic Interactionism:** Examines how individuals create meaning through interaction. Focuses on symbols, language, and micro-level interactions.\n- **Auguste Comte:** Coined the term 'sociology' and advocated for positivism.\n- **Emile Durkheim:** Focused on social solidarity and the division of labor."
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Consider the issue of rising income inequality. Briefly analyze this issue from each of the following sociological perspectives:\n\n1.  Functionalism:\n2.  Conflict Theory:\n3.  Symbolic Interactionism:"
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Classical Sociological Theory: Marx, Durkheim, and Weber - Part 1",
+        "description": "This step dives into the foundational theories of Karl Marx, exploring his concepts of alienation, class struggle, and capitalism. Understand the key elements of Marxist thought.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Classical Sociological Theory: Marx, Durkheim, and Weber - Part 2",
+        "description": "This step examines the work of Emile Durkheim, focusing on social facts, anomie, and the division of labor. Learn how Durkheim viewed social order and integration.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Classical Sociological Theory: Marx, Durkheim, and Weber - Part 3",
+        "description": "This step delves into Max Weber's contributions, particularly his theories on rationalization, bureaucracy, and the Protestant Ethic. Explore the relationship between culture and economic development according to Weber.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Symbolic Interactionism: Meaning, Self, and Society",
+        "description": "This step introduces symbolic interactionism, focusing on how individuals create meaning through interaction and symbols. Explore concepts like the looking-glass self and the social construction of reality.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Structural Functionalism: Understanding Social Systems",
+        "description": "This step examines structural functionalism, exploring how social structures contribute to the stability and functioning of society. Understand concepts such as manifest and latent functions.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Conflict Theory: Power, Inequality, and Social Change",
+        "description": "This step focuses on conflict theory, examining how power differentials and social inequalities drive social change. Explore different perspectives within conflict theory, including critical race theory and feminism.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-8",
+        "stepNumber": 8,
+        "title": "Contemporary Sociological Theory: Trends and Applications",
+        "description": "This step explores contemporary developments in sociological theory, including globalization, postmodernism, and network theory. Learn how these theories are applied to understand contemporary social issues.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769339473444",
+    "createdAt": "2026-01-25T11:11:13.444Z",
+    "progress": 0,
+    "originalPrompt": "",
+    "originalMaterials": "\n\n--- Content from Sociological_Theory Ritzer .pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1613063075064-35b3010835dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzMzk1MDh8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "title": "Изучение Ассемблера",
+    "description": "Этот курс научит вас программировать на языке Ассемблера, начиная с основ и заканчивая более сложными концепциями.",
+    "totalSteps": 7,
+    "steps": [
+      {
+        "id": "step-1",
+        "stepNumber": 1,
+        "title": "Введение в Ассемблер и его роль",
+        "description": "Этот шаг знакомит с языком Ассемблера, его историей, архитектурой компьютера и местом Ассемблера среди других языков программирования. Цель - понять, что такое Ассемблер и для чего он нужен.",
+        "estimatedTime": "45 mins",
+        "tasks": [
+          {
+            "id": "task-1-1",
+            "title": "Посмотреть видео об Ассемблере",
+            "description": "Посмотрите предложенные видео, чтобы получить общее представление об Ассемблере и его применении.",
+            "completed": false
+          },
+          {
+            "id": "task-1-2",
+            "title": "Изучить ключевые концепции",
+            "description": "Просмотрите краткое изложение ключевых концепций и убедитесь, что вы их понимаете.",
+            "completed": false
+          },
+          {
+            "id": "task-1-3",
+            "title": "Выполнить упражнение",
+            "description": "Решите простое упражнение, чтобы закрепить полученные знания.",
+            "completed": false
+          }
+        ],
+        "materials": [
+          {
+            "id": "mat-1-1",
+            "title": "Видео: Что такое Ассемблер и зачем он нужен?",
+            "type": "video",
+            "description": "Объяснение основ языка Ассемблера, его исторического значения и роли в современной разработке.",
+            "youtubeSearch": "ассемблер что это такое простыми словами",
+            "url": "https://www.youtube.com/results?search_query=%D0%B0%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80+%D1%87%D1%82%D0%BE+%D1%8D%D1%82%D0%BE+%D1%82%D0%B0%D0%BA%D0%BE%D0%B5+%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC%D0%B8+%D1%81%D0%BB%D0%BE%D0%B2%D0%B0%D0%BC%D0%B8"
+          },
+          {
+            "id": "mat-1-2",
+            "title": "Видео: Архитектура компьютера для понимания Ассемблера",
+            "type": "video",
+            "description": "Рассмотрение базовой архитектуры компьютера (процессор, память, регистры) и как она связана с Ассемблером.",
+            "youtubeSearch": "архитектура компьютера ассемблер",
+            "url": "https://www.youtube.com/results?search_query=%D0%B0%D1%80%D1%85%D0%B8%D1%82%D0%B5%D0%BA%D1%82%D1%83%D1%80%D0%B0+%D0%BA%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%B0+%D0%B0%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80"
+          },
+          {
+            "id": "mat-1-3",
+            "title": "Key Concepts Summary",
+            "type": "summary",
+            "content": "*   Ассемблер - язык низкого уровня, близкий к машинному коду.\n*   Он напрямую управляет аппаратным обеспечением.\n*   Используется для оптимизации, разработки драйверов и встраиваемых систем.\n*   Важные концепции: регистры, память, команды, прерывания.\n*   Архитектура фон Неймана: процессор, память, устройства ввода/вывода."
+          },
+          {
+            "id": "mat-1-4",
+            "title": "Practice Exercise",
+            "type": "exercise",
+            "content": "Представьте, что вы пишете программу на Ассемблере для сложения двух чисел. Какие шаги нужно предпринять? Какие регистры могут быть использованы?  Опишите эти шаги в свободной форме."
+          }
+        ],
+        "completed": false,
+        "detailsLoaded": true,
+        "unlocked": true
+      },
+      {
+        "id": "step-2",
+        "stepNumber": 2,
+        "title": "Система команд и регистры процессора",
+        "description": "Этот шаг изучает основные команды Ассемблера (mov, add, sub, cmp и др.) и назначение регистров процессора (AX, BX, CX, DX, SP, BP, SI, DI, IP, Flags). Цель - научиться использовать регистры и базовые команды для выполнения простых операций.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-3",
+        "stepNumber": 3,
+        "title": "Адресация памяти и работа с данными",
+        "description": "Этот шаг объясняет различные способы адресации памяти в Ассемблере (прямая, косвенная, индексная). Цель - научиться читать и записывать данные в память, используя различные методы адресации.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-4",
+        "stepNumber": 4,
+        "title": "Условные переходы и циклы",
+        "description": "Этот шаг изучает команды условных переходов (je, jne, jg, jl и др.) и организацию циклов (loop, while). Цель - научиться создавать программы с ветвлениями и циклами.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-5",
+        "stepNumber": 5,
+        "title": "Процедуры (функции) и стек",
+        "description": "Этот шаг знакомит с понятием процедур (функций) в Ассемблере и использованием стека для передачи параметров и хранения локальных переменных. Цель - научиться писать и использовать процедуры для структурирования программ.",
+        "estimatedTime": "1 hour 15 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-6",
+        "stepNumber": 6,
+        "title": "Работа с прерываниями",
+        "description": "Этот шаг объясняет, что такое прерывания и как их использовать в Ассемблере для взаимодействия с операционной системой и аппаратным обеспечением. Цель - научиться обрабатывать прерывания для решения конкретных задач.",
+        "estimatedTime": "1 hour",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      },
+      {
+        "id": "step-7",
+        "stepNumber": 7,
+        "title": "Оптимизация кода на Ассемблере",
+        "description": "Этот шаг посвящен техникам оптимизации кода на Ассемблере для повышения его производительности. Цель - научиться писать эффективный и быстрый код на Ассемблере.",
+        "estimatedTime": "45 mins",
+        "tasks": [],
+        "materials": [],
+        "completed": false,
+        "detailsLoaded": false,
+        "unlocked": false
+      }
+    ],
+    "id": "1769339208580",
+    "createdAt": "2026-01-25T11:06:48.580Z",
+    "progress": 0,
+    "originalPrompt": "Сгенерируй для меня курс ассемблера на русском языке по этой презентации",
+    "originalMaterials": "\n\n--- Content from Lecture 6_Assembly Programming.pdf ---\n",
+    "coverImage": "https://images.unsplash.com/photo-1701099153650-bc35d4327c92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzMzkyNDN8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
     "title": "French for Beginners: A Comprehensive Introduction",
     "description": "This course provides a comprehensive introduction to the French language, covering essential grammar, vocabulary, pronunciation, and cultural insights to help you start communicating confidently in French.",
     "totalSteps": 8,
@@ -62,7 +1560,8 @@
         ],
         "completed": false,
         "detailsLoaded": true,
-        "unlocked": true
+        "unlocked": true,
+        "materialProgress": 3
       },
       {
         "id": "step-2",

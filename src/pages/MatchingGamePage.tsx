@@ -18,8 +18,11 @@ interface Card {
   isMatched: boolean;
 }
 
+const MAX_VISIBLE_CARDS = 20; // max cards on screen at once
+
 const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpdateGame }) => {
-  const [cards, setCards] = useState<Card[]>([]);
+  const [allCards, setAllCards] = useState<Card[]>([]); // full shuffled deck
+  const [visibleCards, setVisibleCards] = useState<Card[]>([]); // cards currently on screen
   const [selectedCards, setSelectedCards] = useState<Card[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set());
   const [isChecking, setIsChecking] = useState(false);
@@ -27,6 +30,14 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
   const [gameComplete, setGameComplete] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [mistakes, setMistakes] = useState(0);
+
+  // Compute square grid dimensions
+  const gridSize = useMemo(() => {
+    const totalVisible = visibleCards.length;
+    const cols = Math.ceil(Math.sqrt(totalVisible));
+    const rows = Math.ceil(totalVisible / cols);
+    return { cols, rows };
+  }, [visibleCards.length]);
 
   // Initialize cards on mount
   useEffect(() => {
@@ -65,13 +76,18 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
     }));
 
     // Combine and shuffle
-    const allCards = [...questionCards, ...answerCards];
-    for (let i = allCards.length - 1; i > 0; i--) {
+    const combined = [...questionCards, ...answerCards];
+    for (let i = combined.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+      [combined[i], combined[j]] = [combined[j], combined[i]];
     }
 
-    setCards(allCards);
+    setAllCards(combined);
+
+    // Take the first batch for display
+    const batchSize = Math.min(combined.length, MAX_VISIBLE_CARDS);
+    setVisibleCards(combined.slice(0, batchSize));
+
     setMatchedPairs(new Set());
     setSelectedCards([]);
     setGameComplete(false);
@@ -80,17 +96,37 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
     setGameStarted(false);
   };
 
+  // Pull next unplaced cards from allCards to replace matched visible slots
+  const fillMatchedSlots = (currentVisible: Card[], currentMatched: Set<string>) => {
+    // Find cards from allCards that aren't in visibleCards yet
+    const visibleIds = new Set(currentVisible.map(c => c.id));
+    const remainingPool = allCards.filter(c => !visibleIds.has(c.id));
+
+    if (remainingPool.length === 0) return currentVisible; // nothing to refill with
+
+    const newVisible = [...currentVisible];
+    let poolIdx = 0;
+
+    for (let i = 0; i < newVisible.length && poolIdx < remainingPool.length; i++) {
+      if (currentMatched.has(newVisible[i].pairId)) {
+        // Replace this matched slot with a fresh card
+        newVisible[i] = remainingPool[poolIdx];
+        poolIdx++;
+      }
+    }
+    return newVisible;
+  };
+
   const handleCardClick = (card: Card) => {
     if (isChecking || card.isMatched || card.isSelected) return;
 
     if (!gameStarted) {
       setGameStarted(true);
-      // Plugin hook: game started
       doAction('matching:gameStarted', { game, totalPairs: game.pairs.length });
     }
 
     // Select the card
-    setCards(prev => prev.map(c => 
+    setVisibleCards(prev => prev.map(c =>
       c.id === card.id ? { ...c, isSelected: true } : c
     ));
 
@@ -98,50 +134,53 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
     setSelectedCards(newSelectedCards);
 
     if (newSelectedCards.length === 2) {
-      // Two cards selected - check for match
       setIsChecking(true);
       const [first, second] = newSelectedCards;
 
       if (first.pairId === second.pairId && first.id !== second.id) {
         // Match found!
-        // Plugin hook: match found
-        doAction('matching:matchFound', { 
-          game, 
-          pairId: first.pairId, 
-          matchedCount: matchedPairs.size + 1,
-          totalPairs: game.pairs.length 
+        const newMatchedCount = matchedPairs.size + 1;
+        doAction('matching:matchFound', {
+          game,
+          pairId: first.pairId,
+          matchedCount: newMatchedCount,
+          totalPairs: game.pairs.length
         });
-        
-        // Dispatch custom event for plugins that listen via DOM events
-        document.dispatchEvent(new CustomEvent('oqyplus:matching:matchFound', {
-          detail: { game, pairId: first.pairId, matchedCount: matchedPairs.size + 1, totalPairs: game.pairs.length }
+
+        document.dispatchEvent(new CustomEvent('gvidtech:matching:matchFound', {
+          detail: { game, pairId: first.pairId, matchedCount: newMatchedCount, totalPairs: game.pairs.length }
         }));
-        
+
         setTimeout(() => {
-          setCards(prev => prev.map(c => 
-            c.pairId === first.pairId ? { ...c, isMatched: true, isSelected: false } : c
-          ));
-          setMatchedPairs(prev => new Set([...prev, first.pairId]));
+          const updatedMatched = new Set([...matchedPairs, first.pairId]);
+          setMatchedPairs(updatedMatched);
+
+          // Mark matched in visible
+          let updatedVisible = visibleCards.map(c =>
+            c.pairId === first.pairId ? { ...c, isMatched: true, isSelected: false } : { ...c, isSelected: false }
+          );
+
+          // Try to refill matched slots with remaining cards
+          updatedVisible = fillMatchedSlots(updatedVisible, updatedMatched);
+
+          setVisibleCards(updatedVisible);
           setSelectedCards([]);
           setIsChecking(false);
 
-          // Check if game is complete
-          if (matchedPairs.size + 1 === game.pairs.length) {
+          // Check if game is complete (all pairs matched)
+          if (updatedMatched.size === game.pairs.length) {
             setGameComplete(true);
-            // Plugin hook: game completed
-            doAction('matching:gameCompleted', { 
-              game, 
-              time: elapsedTime, 
+            doAction('matching:gameCompleted', {
+              game,
+              time: elapsedTime,
               mistakes,
               isNewBestTime: !game.bestTime || elapsedTime < game.bestTime
             });
-            
-            // Dispatch custom event for plugins that listen via DOM events
-            document.dispatchEvent(new CustomEvent('oqyplus:matching:gameCompleted', {
+
+            document.dispatchEvent(new CustomEvent('gvidtech:matching:gameCompleted', {
               detail: { game, time: elapsedTime, mistakes, isNewBestTime: !game.bestTime || elapsedTime < game.bestTime }
             }));
-            
-            // Update best time
+
             if (!game.bestTime || elapsedTime < game.bestTime) {
               onUpdateGame({
                 ...game,
@@ -157,17 +196,16 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
           }
         }, 500);
       } else {
-        // No match - deselect after delay
+        // No match
         setMistakes(prev => prev + 1);
-        // Plugin hook: mismatch
-        doAction('matching:mismatch', { 
-          game, 
-          cards: [first, second], 
-          mistakeCount: mistakes + 1 
+        doAction('matching:mismatch', {
+          game,
+          cards: [first, second],
+          mistakeCount: mistakes + 1
         });
-        
+
         setTimeout(() => {
-          setCards(prev => prev.map(c => 
+          setVisibleCards(prev => prev.map(c =>
             (c.id === first.id || c.id === second.id) && !c.isMatched
               ? { ...c, isSelected: false }
               : c
@@ -253,8 +291,11 @@ const MatchingGamePage: React.FC<MatchingGamePageProps> = ({ game, onBack, onUpd
           </div>
         </div>
       ) : (
-        <div className="matching-game-grid">
-          {cards.map(card => (
+        <div className="matching-game-grid" style={{
+          gridTemplateColumns: `repeat(${gridSize.cols}, 1fr)`,
+          gridTemplateRows: `repeat(${gridSize.rows}, 1fr)`,
+        }}>
+          {visibleCards.map(card => (
             <div
               key={card.id}
               className={`matching-card ${card.isSelected ? 'selected' : ''} ${card.isMatched ? 'matched' : ''} ${card.type}`}

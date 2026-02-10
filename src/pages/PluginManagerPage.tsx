@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePlugins } from '../plugins';
 import { pluginManager, PluginManifest } from '../plugins/PluginManager';
+import { apiPost } from '../lib/fetch';
 
 interface PluginManagerPageProps {
   onBack: () => void;
@@ -9,40 +10,13 @@ interface PluginManagerPageProps {
 // Available plugins that can be downloaded (only plugins that exist in /plugins folder)
 const AVAILABLE_PLUGINS = [
   {
-    id: 'strict-quiz-mode',
-    name: 'Strict Quiz Mode',
-    version: '2.0.0',
-    description: 'Raises quiz passing threshold to 90% for more challenging learning.',
-    author: 'OqyPlus Team',
-    file: '/plugins/strict-quiz-mode.plugin.js',
-    icon: '🎯'
-  },
-  {
-    id: 'study-timer',
-    name: 'Study Timer',
-    version: '2.0.0',
-    description: 'Displays a floating timer showing how long you\'ve been studying.',
-    author: 'OqyPlus Team',
-    file: '/plugins/study-timer.plugin.js',
-    icon: '⏱️'
-  },
-  {
     id: 'dark-mode-enhanced',
     name: 'Custom Color Themes',
     version: '2.1.0',
     description: 'Apply beautiful dark color themes with comprehensive styling for all UI elements.',
-    author: 'OqyPlus Team',
+    author: 'gvidtech Team',
     file: '/plugins/dark-mode-enhanced.plugin.js',
     icon: '🎨'
-  },
-  {
-    id: 'sound-effects',
-    name: 'Sound Effects',
-    version: '2.0.0',
-    description: 'Plays satisfying sounds for correct/incorrect answers and achievements.',
-    author: 'OqyPlus Team',
-    file: '/plugins/sound-effects.plugin.js',
-    icon: '🔊'
   }
 ];
 
@@ -338,13 +312,9 @@ const PluginManagerPage: React.FC<PluginManagerPageProps> = ({ onBack }) => {
     setEditorError(null);
     
     try {
-      const response = await fetch('http://localhost:3001/api/modify-plugin-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          code: editorCode,
-          prompt: prompt
-        })
+      const response = await apiPost('/modify-plugin-code', {
+        code: editorCode,
+        prompt: prompt
       });
 
       // Check if we got HTML instead of JSON (server not running)
@@ -395,7 +365,7 @@ const PluginManagerPage: React.FC<PluginManagerPageProps> = ({ onBack }) => {
         </button>
         <div className="plugin-header-content">
           <h1>Plugin Manager</h1>
-          <p className="plugin-header-subtitle">Extend OqyPlus with powerful plugins</p>
+          <p className="plugin-header-subtitle">Extend gvidtech with powerful plugins</p>
         </div>
         <div className="plugin-stats">
           <div className="stat-item">

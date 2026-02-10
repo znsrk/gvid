@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { CourseStep, QuizQuestion } from '../types/roadmap';
 import LatexText from '../components/LatexText';
 import { doAction, applyFilters, applyFiltersSync } from '../plugins';
+import { apiPost } from '../lib/fetch';
 
 interface QuizPageProps {
   step: CourseStep;
@@ -10,8 +11,6 @@ interface QuizPageProps {
   onComplete: (score: number, total: number, questions: QuizQuestion[]) => void;
   onLoadingChange: (loading: boolean, message?: string) => void;
 }
-
-const API_BASE = 'http://localhost:3001/api';
 
 const QuizPage: React.FC<QuizPageProps> = ({ 
   step, 
@@ -56,13 +55,9 @@ const QuizPage: React.FC<QuizPageProps> = ({
     doAction('quiz:beforeGenerate', { step, courseTitle });
 
     try {
-      const response = await fetch(`${API_BASE}/generate-test`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          step,
-          courseTitle,
-        }),
+      const response = await apiPost('/generate-test', {
+        step,
+        courseTitle,
       });
 
       if (!response.ok) throw new Error('Failed to generate quiz');
@@ -107,7 +102,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
     });
     
     // Dispatch custom event for plugins that listen via DOM events
-    document.dispatchEvent(new CustomEvent('oqyplus:quiz:answered', {
+    document.dispatchEvent(new CustomEvent('gvidtech:quiz:answered', {
       detail: { question: questions[questionIndex], selectedAnswer: answerIndex, isCorrect, questionIndex }
     }));
     

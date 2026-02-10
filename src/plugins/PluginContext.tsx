@@ -1,5 +1,5 @@
 /**
- * OqyPlus Plugin System - React Context Provider
+ * gvidtech Plugin System - React Context Provider
  * 
  * Provides React components access to the plugin system.
  * This enables:

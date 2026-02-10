@@ -1,4 +1,4 @@
-# Oqy Plus
+# gvid Plus
 
 An educational platform for learning and studying with interactive tools. AI creates entire courses and learning material from the stuff provided. 
 

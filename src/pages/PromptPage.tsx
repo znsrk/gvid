@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Course, FlashcardDeck, StandaloneQuiz, MatchingGame, GenerationMode, QuizMode } from '../types/roadmap';
+import { Course, FlashcardDeck, StandaloneQuiz, MatchingGame, WordScrambleGame, FillBlankGame, GenerationMode, QuizMode } from '../types/roadmap';
+import { apiFormData, apiPost } from '../lib/fetch';
 
 interface PromptPageProps {
   onCourseGenerated: (course: Course) => void;
   onFlashcardsGenerated: (deck: FlashcardDeck) => void;
   onQuizGenerated: (quiz: StandaloneQuiz) => void;
   onMatchingGameGenerated: (game: MatchingGame) => void;
+  onWordScrambleGenerated: (game: WordScrambleGame) => void;
+  onFillBlankGenerated: (game: FillBlankGame) => void;
   onLoadingChange: (loading: boolean, message?: string) => void;
 }
 
@@ -14,12 +17,14 @@ const PromptPage: React.FC<PromptPageProps> = ({
   onFlashcardsGenerated,
   onQuizGenerated,
   onMatchingGameGenerated,
+  onWordScrambleGenerated,
+  onFillBlankGenerated,
   onLoadingChange 
 }) => {
   const [prompt, setPrompt] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [generationMode, setGenerationMode] = useState<GenerationMode>('course');
+  const [generationMode, setGenerationMode] = useState<GenerationMode>('quiz');
   const [quizMode, setQuizMode] = useState<QuizMode>('standard');
   const [quizClickCount, setQuizClickCount] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -63,6 +68,20 @@ const PromptPage: React.FC<PromptPageProps> = ({
       "Connect authors with their books...",
       "Match terms with definitions...",
       "Link historical figures to events...",
+    ],
+    'word-scramble': [
+      "Scramble biology vocabulary...",
+      "Unscramble programming terms...",
+      "Chemistry elements word puzzle...",
+      "Guess the historical terms...",
+      "Medical terminology scramble...",
+    ],
+    'fill-blank': [
+      "Fill in the blanks about biology...",
+      "Complete sentences on physics...",
+      "History fill-in-the-blank quiz...",
+      "Programming concepts fill blanks...",
+      "Chemistry fill-in-the-blank...",
     ],
   };
 
@@ -157,7 +176,9 @@ const PromptPage: React.FC<PromptPageProps> = ({
       course: 'Generating your course...',
       quiz: quizMode === 'rapid' ? 'Creating rapid quiz...' : 'Creating quiz questions...',
       flashcards: 'Generating flashcards...',
-      matching: 'Creating matching game...'
+      matching: 'Creating matching game...',
+      'word-scramble': 'Creating word scramble...',
+      'fill-blank': 'Creating fill-in-the-blank game...'
     };
 
     onLoadingChange(true, loadingMessages[generationMode]);
@@ -169,10 +190,7 @@ const PromptPage: React.FC<PromptPageProps> = ({
       files.forEach((file) => formData.append('files', file));
 
       if (generationMode === 'course') {
-        const response = await fetch('http://localhost:3001/api/generate-roadmap', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await apiFormData('/generate-roadmap', formData);
 
         if (!response.ok) throw new Error('Failed to generate course');
         const data = await response.json();
@@ -180,11 +198,7 @@ const PromptPage: React.FC<PromptPageProps> = ({
         // Generate a cover image
         let coverImage = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
         try {
-          const imageResponse = await fetch('http://localhost:3001/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: data.roadmap.title }),
-          });
+          const imageResponse = await apiPost('/generate-image', { prompt: data.roadmap.title });
           const imageData = await imageResponse.json();
           if (imageData.imageUrl) {
             coverImage = imageData.imageUrl;
@@ -205,21 +219,14 @@ const PromptPage: React.FC<PromptPageProps> = ({
 
         onCourseGenerated(course);
       } else if (generationMode === 'flashcards') {
-        const response = await fetch('http://localhost:3001/api/generate-flashcards', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await apiFormData('/generate-flashcards', formData);
 
         if (!response.ok) throw new Error('Failed to generate flashcards');
         const data = await response.json();
         
         let coverImage = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
         try {
-          const imageResponse = await fetch('http://localhost:3001/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: data.title }),
-          });
+          const imageResponse = await apiPost('/generate-image', { prompt: data.title });
           const imageData = await imageResponse.json();
           if (imageData.imageUrl) {
             coverImage = imageData.imageUrl;
@@ -240,21 +247,14 @@ const PromptPage: React.FC<PromptPageProps> = ({
 
         onFlashcardsGenerated(deck);
       } else if (generationMode === 'quiz') {
-        const response = await fetch('http://localhost:3001/api/generate-standalone-quiz', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await apiFormData('/generate-standalone-quiz', formData);
 
         if (!response.ok) throw new Error('Failed to generate quiz');
         const data = await response.json();
         
         let coverImage = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
         try {
-          const imageResponse = await fetch('http://localhost:3001/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: data.title }),
-          });
+          const imageResponse = await apiPost('/generate-image', { prompt: data.title });
           const imageData = await imageResponse.json();
           if (imageData.imageUrl) {
             coverImage = imageData.imageUrl;
@@ -276,21 +276,14 @@ const PromptPage: React.FC<PromptPageProps> = ({
 
         onQuizGenerated(quiz);
       } else if (generationMode === 'matching') {
-        const response = await fetch('http://localhost:3001/api/generate-matching-game', {
-          method: 'POST',
-          body: formData,
-        });
+        const response = await apiFormData('/generate-matching-game', formData);
 
         if (!response.ok) throw new Error('Failed to generate matching game');
         const data = await response.json();
         
         let coverImage = 'linear-gradient(135deg, #667eea 0%, #f093fb 100%)';
         try {
-          const imageResponse = await fetch('http://localhost:3001/api/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: data.title }),
-          });
+          const imageResponse = await apiPost('/generate-image', { prompt: data.title });
           const imageData = await imageResponse.json();
           if (imageData.imageUrl) {
             coverImage = imageData.imageUrl;
@@ -309,6 +302,60 @@ const PromptPage: React.FC<PromptPageProps> = ({
         };
 
         onMatchingGameGenerated(game);
+      } else if (generationMode === 'word-scramble') {
+        const response = await apiFormData('/generate-word-scramble', formData);
+
+        if (!response.ok) throw new Error('Failed to generate word scramble');
+        const data = await response.json();
+        
+        let coverImage = 'linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%)';
+        try {
+          const imageResponse = await apiPost('/generate-image', { prompt: data.title });
+          const imageData = await imageResponse.json();
+          if (imageData.imageUrl) {
+            coverImage = imageData.imageUrl;
+          }
+        } catch (imgError) {
+          console.error('Failed to generate image:', imgError);
+        }
+
+        const scrambleGame: WordScrambleGame = {
+          id: Date.now().toString(),
+          title: data.title,
+          description: data.description,
+          words: data.words,
+          createdAt: new Date().toISOString(),
+          coverImage: coverImage,
+        };
+
+        onWordScrambleGenerated(scrambleGame);
+      } else if (generationMode === 'fill-blank') {
+        const response = await apiFormData('/generate-fill-blank', formData);
+
+        if (!response.ok) throw new Error('Failed to generate fill-in-the-blank game');
+        const data = await response.json();
+        
+        let coverImage = 'linear-gradient(135deg, #10b981 0%, #3b82f6 100%)';
+        try {
+          const imageResponse = await apiPost('/generate-image', { prompt: data.title });
+          const imageData = await imageResponse.json();
+          if (imageData.imageUrl) {
+            coverImage = imageData.imageUrl;
+          }
+        } catch (imgError) {
+          console.error('Failed to generate image:', imgError);
+        }
+
+        const fillBlankGame: FillBlankGame = {
+          id: Date.now().toString(),
+          title: data.title,
+          description: data.description,
+          sentences: data.sentences,
+          createdAt: new Date().toISOString(),
+          coverImage: coverImage,
+        };
+
+        onFillBlankGenerated(fillBlankGame);
       }
 
       setPrompt('');
@@ -372,7 +419,7 @@ const PromptPage: React.FC<PromptPageProps> = ({
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFiles = Array.from(e.dataTransfer.files).filter(file => {
         const ext = file.name.split('.').pop()?.toLowerCase();
-        return ['pdf', 'txt', 'doc', 'docx', 'md'].includes(ext || '');
+        return ['pdf', 'txt', 'doc', 'docx', 'md', 'rtf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif'].includes(ext || '');
       });
       if (droppedFiles.length > 0) {
         setFiles(prev => [...prev, ...droppedFiles]);
@@ -380,8 +427,20 @@ const PromptPage: React.FC<PromptPageProps> = ({
     }
   };
 
-  const getFileIcon = (filename: string) => {
+  const getFileIcon = (filename: string, file?: File) => {
     const ext = filename.split('.').pop()?.toLowerCase();
+    
+    // Show thumbnail for images
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '') && file) {
+      return (
+        <img 
+          src={URL.createObjectURL(file)} 
+          alt={filename}
+          className="file-preview-thumbnail"
+        />
+      );
+    }
+    
     switch (ext) {
       case 'pdf':
         return (
@@ -424,7 +483,11 @@ const PromptPage: React.FC<PromptPageProps> = ({
       case 'flashcards':
         return 'Study cards for memorization and quick review';
       case 'matching':
-        return 'Match questions with answers in a fun 5×4 grid game';
+        return 'Match questions with answers in a fun grid game';
+      case 'word-scramble':
+        return 'Unscramble key terms and vocabulary for gamified learning';
+      case 'fill-blank':
+        return 'Complete sentences by filling in the missing words';
     }
   };
 
@@ -465,16 +528,6 @@ const PromptPage: React.FC<PromptPageProps> = ({
 
       <div className="generation-modes">
         <button 
-          className={`mode-btn ${generationMode === 'course' ? 'active' : ''}`}
-          onClick={() => handleModeClick('course')}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          </svg>
-          Course
-        </button>
-        <button 
           className={`mode-btn ${generationMode === 'quiz' ? 'active' : ''} ${generationMode === 'quiz' && quizMode === 'rapid' ? 'rapid' : ''}`}
           onClick={() => handleModeClick('quiz')}
         >
@@ -508,6 +561,42 @@ const PromptPage: React.FC<PromptPageProps> = ({
           </svg>
           Match
         </button>
+        <button 
+          className={`mode-btn ${generationMode === 'word-scramble' ? 'active' : ''}`}
+          onClick={() => handleModeClick('word-scramble')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 7h16"/>
+            <path d="M6 20l3-7"/>
+            <path d="M18 20l-3-7"/>
+            <path d="M7.5 13h9"/>
+            <path d="M9 4l1 3"/>
+            <path d="M15 4l-1 3"/>
+          </svg>
+          Scramble
+        </button>
+        <button 
+          className={`mode-btn ${generationMode === 'fill-blank' ? 'active' : ''}`}
+          onClick={() => handleModeClick('fill-blank')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 7h16"/>
+            <path d="M4 12h8"/>
+            <path d="M14 12h6" strokeDasharray="2 2"/>
+            <path d="M4 17h12"/>
+          </svg>
+          Fill Blank
+        </button>
+        <button 
+          className={`mode-btn ${generationMode === 'course' ? 'active' : ''}`}
+          onClick={() => handleModeClick('course')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          Course
+        </button>
       </div>
 
       <p className="mode-description">{getModeDescription()}</p>
@@ -515,11 +604,20 @@ const PromptPage: React.FC<PromptPageProps> = ({
       <div className={`input-container ${isDragging ? 'dragging' : ''}`}>
         
         {files.length > 0 && (
+          <div className="file-upload-banner">
+            <span>{files.length} file{files.length > 1 ? 's' : ''} attached</span>
+            <button className="file-upload-banner-clear" onClick={() => setFiles([])}>
+              Clear all
+            </button>
+          </div>
+        )}
+
+        {files.length > 0 && (
           <div className="file-preview-grid">
             {files.map((file, index) => (
               <div key={index} className="file-preview-box">
                 <div className="file-preview-icon">
-                  {getFileIcon(file.name)}
+                  {getFileIcon(file.name, file)}
                 </div>
                 <div className="file-preview-info">
                   <span className="file-preview-name">{file.name}</span>
@@ -552,17 +650,18 @@ const PromptPage: React.FC<PromptPageProps> = ({
               type="file"
               className="file-input-hidden"
               multiple
-              accept=".pdf,.txt,.doc,.docx,.md"
+              accept=".pdf,.txt,.doc,.docx,.md,.rtf,.jpg,.jpeg,.png,.gif,.webp,.heic,.heif"
               onChange={handleFileSelect}
             />
             <button 
-              className="input-btn" 
+              className={`input-btn ${files.length > 0 ? 'has-files' : ''}`}
               onClick={() => fileInputRef.current?.click()}
               title="Upload files"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
               </svg>
+              {files.length > 0 && <span className="file-count-badge">{files.length}</span>}
             </button>
             <button
               className="input-btn submit"
@@ -580,7 +679,7 @@ const PromptPage: React.FC<PromptPageProps> = ({
       </div>
       
       <div className="prompt-tips">
-        <p>💡 <strong>Tips:</strong> Be specific about your learning goals • Upload PDFs or documents for personalized content • Double-tap Quiz for Rapid mode ⚡</p>
+        <p>💡 <strong>Tips:</strong> Be specific about your learning goals • Upload PDFs, images, or documents for AI-powered content • Double-tap Quiz for Rapid mode ⚡</p>
       </div>
       </div>
 

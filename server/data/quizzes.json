@@ -1,5 +1,421 @@
 [
   {
+    "id": "1769350793651",
+    "title": "Comprehensive Biology Quiz",
+    "description": "This quiz tests your understanding of fundamental biology concepts, covering cell biology, genetics, evolution, and ecology.",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "Which of the following is NOT a characteristic of all living organisms?",
+        "options": [
+          "Reproduction",
+          "Growth and Development",
+          "Metabolism",
+          "Ability to photosynthesize"
+        ],
+        "correctAnswer": 3,
+        "explanation": "While photosynthesis is a crucial process for many organisms (especially plants and some bacteria), it is not a universal characteristic of all living things. Animals, for example, cannot photosynthesize."
+      },
+      {
+        "id": "q2",
+        "question": "The basic structural and functional unit of life is the:",
+        "options": [
+          "Tissue",
+          "Organ",
+          "Cell",
+          "Organelle"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The cell is considered the fundamental unit of life because it's the smallest unit capable of carrying out life processes. Tissues are made of cells, organs are made of tissues, and organelles are components within a cell."
+      },
+      {
+        "id": "q3",
+        "question": "What is the primary function of ribosomes within a cell?",
+        "options": [
+          "DNA replication",
+          "Protein synthesis",
+          "Energy production",
+          "Waste disposal"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Ribosomes are responsible for protein synthesis. They read mRNA and translate the genetic code into a specific amino acid sequence, forming proteins."
+      },
+      {
+        "id": "q4",
+        "question": "Which of the following is a defining characteristic of eukaryotes that is NOT found in prokaryotes?",
+        "options": [
+          "Cell membrane",
+          "DNA",
+          "Ribosomes",
+          "Membrane-bound organelles"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Eukaryotic cells have membrane-bound organelles, such as the nucleus and mitochondria, which are absent in prokaryotic cells. Both cell types possess a cell membrane, DNA, and ribosomes."
+      },
+      {
+        "id": "q5",
+        "question": "During which phase of mitosis do sister chromatids separate and move to opposite poles of the cell?",
+        "options": [
+          "Prophase",
+          "Metaphase",
+          "Anaphase",
+          "Telophase"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Anaphase is characterized by the separation of sister chromatids, pulled apart by the spindle fibers towards opposite poles of the cell. This ensures that each daughter cell receives a complete set of chromosomes."
+      },
+      {
+        "id": "q6",
+        "question": "What is the role of tRNA in protein synthesis?",
+        "options": [
+          "Carries the genetic code from the nucleus to the ribosome",
+          "Transcribes DNA into RNA",
+          "Carries amino acids to the ribosome",
+          "Catalyzes the formation of peptide bonds"
+        ],
+        "correctAnswer": 2,
+        "explanation": "tRNA (transfer RNA) molecules carry specific amino acids to the ribosome, where they are added to the growing polypeptide chain according to the mRNA sequence."
+      },
+      {
+        "id": "q7",
+        "question": "If a heterozygous plant with the genotype 'Aa' is self-pollinated, what is the probability of the offspring having the genotype 'aa'?",
+        "options": [
+          "0%",
+          "25%",
+          "50%",
+          "75%"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Using a Punnett square for the cross Aa x Aa, the possible genotypes are AA, Aa, Aa, and aa. Therefore, the probability of 'aa' is 1/4 or 25%."
+      },
+      {
+        "id": "q8",
+        "question": "Which of the following processes is primarily responsible for genetic variation in sexually reproducing organisms?",
+        "options": [
+          "Mitosis",
+          "Binary fission",
+          "Mutation",
+          "Meiosis"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Meiosis, through crossing over and independent assortment of chromosomes, shuffles genetic material and generates diverse combinations of genes in gametes, leading to genetic variation in offspring."
+      },
+      {
+        "id": "q9",
+        "question": "Natural selection acts directly on:",
+        "options": [
+          "Genotypes",
+          "Phenotypes",
+          "Alleles",
+          "Genes"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Natural selection acts on the phenotype (observable characteristics) of an organism. Individuals with phenotypes better suited to their environment are more likely to survive and reproduce, passing on their genes to the next generation."
+      },
+      {
+        "id": "q10",
+        "question": "What is the term for the process by which different species evolve similar traits due to similar environmental pressures?",
+        "options": [
+          "Divergent evolution",
+          "Convergent evolution",
+          "Coevolution",
+          "Parallel evolution"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Convergent evolution is the process where unrelated species independently evolve similar traits because they occupy similar environments and face similar selective pressures. For example, the wings of birds and bats."
+      },
+      {
+        "id": "q11",
+        "question": "Which of the following represents a population?",
+        "options": [
+          "All the different species in a forest",
+          "All the living things in a lake",
+          "All the maple trees in a forest",
+          "All the biotic and abiotic factors in a grassland"
+        ],
+        "correctAnswer": 2,
+        "explanation": "A population is defined as a group of individuals of the same species living in the same area and capable of interbreeding."
+      },
+      {
+        "id": "q12",
+        "question": "What is the role of decomposers in an ecosystem?",
+        "options": [
+          "Produce their own food through photosynthesis",
+          "Consume living organisms",
+          "Break down dead organic matter",
+          "Fix nitrogen from the atmosphere"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Decomposers, like fungi and bacteria, break down dead plants and animals, returning nutrients to the soil. This process is essential for nutrient cycling within an ecosystem."
+      },
+      {
+        "id": "q13",
+        "question": "Which of the following is an example of a density-dependent limiting factor on population growth?",
+        "options": [
+          "A volcanic eruption",
+          "A severe drought",
+          "Competition for resources",
+          "A sudden cold snap"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Density-dependent limiting factors are those that increase in effect as a population's density increases. Competition for resources (food, water, space) is a prime example, as it becomes more intense with higher population density."
+      },
+      {
+        "id": "q14",
+        "question": "What is the term for the long-term predictable changes in a community after a disturbance?",
+        "options": [
+          "Succession",
+          "Climax community",
+          "Pioneer species",
+          "Population fluctuation"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Ecological succession is the process of change in the species structure of an ecological community over time. There's primary and secondary succession depending on the starting point of the habitat."
+      },
+      {
+        "id": "q15",
+        "question": "What is the function of the enzyme DNA polymerase?",
+        "options": [
+          "Unwinding the DNA double helix",
+          "Adding nucleotides to a growing DNA strand",
+          "Proofreading DNA for errors",
+          "Joining DNA fragments together"
+        ],
+        "correctAnswer": 1,
+        "explanation": "DNA polymerase is the key enzyme in DNA replication. It adds complementary nucleotides to the template strand, synthesizing a new DNA strand."
+      },
+      {
+        "id": "q16",
+        "question": "A certain disease is caused by a recessive allele. If two parents, both carriers of the allele, have a child, what is the probability that the child will have the disease?",
+        "options": [
+          "0%",
+          "25%",
+          "50%",
+          "75%"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Let 'd' be the recessive allele. Both parents are carriers (Dd). Using a Punnett square, the possible genotypes are DD, Dd, Dd, and dd. The probability of the child having the disease (dd) is 1/4 or 25%."
+      },
+      {
+        "id": "q17",
+        "question": "Which of the following accurately describes the flow of energy through an ecosystem?",
+        "options": [
+          "Energy cycles through the ecosystem.",
+          "Energy is created by decomposers.",
+          "Energy flows in one direction, from producers to consumers.",
+          "Energy is equally distributed among all trophic levels."
+        ],
+        "correctAnswer": 2,
+        "explanation": "Energy flow in an ecosystem is unidirectional. Producers (e.g., plants) capture energy from the sun, and this energy is transferred to consumers (herbivores, carnivores, etc.) as they eat each other. Energy is lost as heat at each trophic level."
+      },
+      {
+        "id": "q18",
+        "question": "Which of the following best describes the endosymbiotic theory?",
+        "options": [
+          "The theory that all cells arise from pre-existing cells",
+          "The theory that life originated from non-living matter",
+          "The theory that mitochondria and chloroplasts were once free-living prokaryotes that were engulfed by larger cells",
+          "The theory that evolution occurs gradually over long periods"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The endosymbiotic theory explains the origin of mitochondria and chloroplasts in eukaryotic cells. It proposes that these organelles were once independent prokaryotic organisms that were engulfed by larger cells and formed a mutually beneficial relationship."
+      }
+    ],
+    "createdAt": "2026-01-25T14:19:53.651Z",
+    "isRapid": false,
+    "coverImage": "https://images.unsplash.com/photo-1612980448615-529b14a0f9fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNTA4Mjl8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
+    "id": "1769344287246",
+    "title": "Assembly Programming Fundamentals",
+    "description": "This quiz covers fundamental concepts in assembly programming, including registers, memory addressing, instruction types, and basic program structure.",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "Which of the following is NOT a general-purpose register commonly found in x86 architecture?",
+        "options": [
+          "EAX",
+          "EBX",
+          "ECX",
+          "EIP"
+        ],
+        "correctAnswer": 3,
+        "explanation": "EIP (Instruction Pointer) is a special-purpose register that holds the address of the next instruction to be executed. EAX, EBX, and ECX are general-purpose registers."
+      },
+      {
+        "id": "q2",
+        "question": "What is the primary function of the stack in assembly programming?",
+        "options": [
+          "Storing program code",
+          "Storing global variables",
+          "Storing function call information and local variables",
+          "Storing operating system kernel code"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The stack is primarily used for storing function call information (return addresses, parameters) and local variables. It follows a LIFO (Last-In, First-Out) structure."
+      },
+      {
+        "id": "q3",
+        "question": "Which assembly instruction is typically used to move data from one location to another?",
+        "options": [
+          "ADD",
+          "SUB",
+          "MOV",
+          "CMP"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The `MOV` instruction is used to move data between registers, memory locations, or immediate values."
+      },
+      {
+        "id": "q4",
+        "question": "What does the term 'operand' refer to in an assembly instruction?",
+        "options": [
+          "The instruction itself",
+          "The data or address that the instruction operates on",
+          "The assembly language syntax",
+          "The program counter"
+        ],
+        "correctAnswer": 1,
+        "explanation": "An operand is the data or address that the instruction operates on. For example, in `MOV EAX, EBX`, EAX and EBX are the operands."
+      },
+      {
+        "id": "q5",
+        "question": "Which addressing mode uses the value in a register as the memory address?",
+        "options": [
+          "Direct addressing",
+          "Indirect addressing",
+          "Immediate addressing",
+          "Indexed addressing"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Indirect addressing uses the value in a register as the memory address. For example, `MOV EAX, [EBX]` moves the value at the address stored in EBX into EAX."
+      },
+      {
+        "id": "q6",
+        "question": "What is the purpose of the `CMP` instruction?",
+        "options": [
+          "To perform addition",
+          "To perform subtraction",
+          "To compare two values and set flags",
+          "To move data"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The `CMP` instruction compares two values by subtracting the second operand from the first operand and setting flags (such as Zero Flag, Sign Flag, Overflow Flag) based on the result.  It does NOT store the result."
+      },
+      {
+        "id": "q7",
+        "question": "Which instruction is commonly used to conditionally jump to a different part of the code based on the flags set by a `CMP` instruction?",
+        "options": [
+          "MOV",
+          "ADD",
+          "JMP",
+          "JE"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Conditional jump instructions like `JE` (Jump if Equal), `JNE` (Jump if Not Equal), `JG` (Jump if Greater), etc., jump to a different part of the code only if a specific condition (indicated by the flags) is met after a comparison (usually with `CMP`)."
+      },
+      {
+        "id": "q8",
+        "question": "What is the role of the 'linker' in the assembly programming process?",
+        "options": [
+          "To translate assembly code into machine code",
+          "To execute the machine code",
+          "To combine multiple object files into a single executable file",
+          "To debug the assembly code"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The linker combines multiple object files (usually created by the assembler from different assembly source files) into a single executable file, resolving references between them."
+      },
+      {
+        "id": "q9",
+        "question": "What does the instruction `PUSH EAX` do?",
+        "options": [
+          "Moves the value of EAX to memory location EAX",
+          "Adds EAX to the stack pointer",
+          "Pushes the value of EAX onto the stack",
+          "Pops the value from the stack into EAX"
+        ],
+        "correctAnswer": 2,
+        "explanation": "`PUSH EAX` decreases the stack pointer (ESP) and then copies the value of EAX onto the top of the stack. This effectively stores the value of EAX on the stack."
+      },
+      {
+        "id": "q10",
+        "question": "What is the purpose of the `RET` instruction?",
+        "options": [
+          "To halt the program execution",
+          "To return from a subroutine or function",
+          "To reset all registers to zero",
+          "To load data from memory"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The `RET` instruction returns from a subroutine or function by popping the return address from the stack and jumping to that address. This continues the execution of the calling function."
+      },
+      {
+        "id": "q11",
+        "question": "In assembly, what does the acronym 'API' typically stand for?",
+        "options": [
+          "Advanced Programming Interface",
+          "Application Programming Interface",
+          "Assembly Programming Instruction",
+          "Arithmetic Processing Instruction"
+        ],
+        "correctAnswer": 1,
+        "explanation": "API stands for Application Programming Interface. It defines how software components should interact, especially when calling operating system functions."
+      },
+      {
+        "id": "q12",
+        "question": "Which addressing mode involves adding a constant offset to a register value to calculate the memory address?",
+        "options": [
+          "Direct addressing",
+          "Register addressing",
+          "Base-plus-offset addressing",
+          "Immediate addressing"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Base-plus-offset addressing calculates the memory address by adding a constant offset to the value in a base register (e.g., `[EBX + 8]` where 8 is the offset)."
+      },
+      {
+        "id": "q13",
+        "question": "What is the difference between a NEAR jump and a FAR jump?",
+        "options": [
+          "A NEAR jump jumps within the same segment, while a FAR jump jumps to a different segment.",
+          "A NEAR jump is faster than a FAR jump.",
+          "A FAR jump is used for conditional jumps, while a NEAR jump is used for unconditional jumps.",
+          "There is no difference between NEAR and FAR jumps."
+        ],
+        "correctAnswer": 0,
+        "explanation": "A NEAR jump is used for jumps within the same code segment, while a FAR jump is used for jumps to a different code segment, requiring the segment register to be updated as well."
+      },
+      {
+        "id": "q14",
+        "question": "Which of the following flags is set when the result of an arithmetic operation is zero?",
+        "options": [
+          "Carry Flag",
+          "Sign Flag",
+          "Zero Flag",
+          "Overflow Flag"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The Zero Flag (ZF) is set to 1 when the result of an arithmetic or logical operation is zero."
+      },
+      {
+        "id": "q15",
+        "question": "What is the purpose of the `CALL` instruction?",
+        "options": [
+          "To compare two values",
+          "To unconditionally jump to an address",
+          "To call a subroutine or function",
+          "To exit the program"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The `CALL` instruction is used to call a subroutine or function. It pushes the return address onto the stack and then jumps to the starting address of the subroutine."
+      }
+    ],
+    "createdAt": "2026-01-25T12:31:27.246Z",
+    "isRapid": false,
+    "coverImage": "https://images.unsplash.com/photo-1701099153650-bc35d4327c92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NjIzOTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkzNDQzMjF8&ixlib=rb-4.1.0&q=80&w=1080"
+  },
+  {
     "id": "1769336402437",
     "title": "Assembly Programming Fundamentals Quiz",
     "description": "This quiz tests your understanding of fundamental concepts in assembly programming, including registers, memory organization, instructions, and basic operations.",
