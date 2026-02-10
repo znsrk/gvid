@@ -114,6 +114,15 @@ const upload = multer({
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Root route for health check/verification
+app.get('/', (req, res) => {
+  res.send('Oqy+ API Server is running!');
+});
+
+app.get('/api', (req, res) => {
+  res.send('Oqy+ API Endpoint');
+});
+
 // ============ HELPER FUNCTIONS ============
 
 async function fixJsonWithAI(malformedJson, errorMessage, originalPrompt) {
