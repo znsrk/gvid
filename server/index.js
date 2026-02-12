@@ -1284,11 +1284,13 @@ app.post('/api/generate-flashcards', requireAuth, checkRateLimit, upload.array('
 
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent([
-      { text: `Generate flashcards with difficulty matched to the material complexity. Analyze the material (including any uploaded files/images) and determine if it's beginner, intermediate, or advanced level.
+      { text: `Generate flashcards with difficulty matched to the material complexity. Analyze the material (including any uploaded files/images) and determine the appropriate number of flashcards to comprehensively cover the topic.
 
-- Beginner material: 10-15 flashcards, mostly definitions and basic concepts
-- Intermediate material: 15-25 flashcards, mix of concepts, applications, and connections
-- Advanced material: 20-35 flashcards, include analysis, synthesis, and edge cases
+- Light/Introduction material: 10-20 flashcards, focusing on core definitions.
+- Standard/Intermediate material: 20-40 flashcards, covering detailed concepts and relationships.
+- Dense/Advanced material: 40-60+ flashcards, ensuring comprehensive coverage of all details, edge cases, and analysis.
+
+Do not arbitrarily limit to ~20 cards. If the material is dense or lengthy, generate as many cards as needed to cover it fully (up to 60).
 
 Distribute difficulty: 30% easy, 40% medium, 30% hard.
 
